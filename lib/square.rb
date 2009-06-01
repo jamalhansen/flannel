@@ -4,6 +4,7 @@ module Flannel
     
     def initialize params={}
       @preformatted = params[:preformatted] == true
+      @wiki_link= params[:wiki_link]
       @lines = []
     end
 
@@ -77,6 +78,16 @@ module Flannel
 
     def empty? str
       str.nil? || str.strip == ""
+    end
+
+    def wiki_link topic
+      @wiki_link.call(topic)
+    end
+
+    def permalink topic
+      require 'iconv'
+      # thanks to ismasan http://snippets.dzone.com/posts/show/4457
+      (Iconv.new('US-ASCII//TRANSLIT', 'utf-8').iconv topic).gsub(/[^\w\s\-\â€”]/,'').gsub(/[^\w]|[\_]/,' ').split.join('-').downcase
     end
   end
 end

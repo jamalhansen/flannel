@@ -56,5 +56,26 @@ class SquareTest < Test::Unit::TestCase
       square << "_"
       assert_equal "<pre>foo\n\n   bar</pre>", square.to_h
     end
+
+    context "When building wiki links" do
+      should "build wiki links" do
+        wiki_link = lambda { |keyword| "http://www.example.com/foo/#{keyword}/"}
+        square = Flannel::Square.new :wiki_link => wiki_link
+
+        assert_equal "http://www.example.com/foo/bar/", square.wiki_link("bar")
+      end
+
+      should "build wiki links based on a lambda" do
+        wiki_link = lambda { |keyword| "http://www.rubyyot.com/foo/#{keyword}/"}
+        square = Flannel::Square.new :wiki_link => wiki_link
+
+        assert_equal "http://www.rubyyot.com/foo/cheese/", square.wiki_link("cheese")
+      end
+
+      should "should make topics into permalinks" do
+        square = Flannel::Square.new
+        assert_equal "get-the-box", square.permalink("get the box")
+      end
+    end
   end
 end
