@@ -22,21 +22,7 @@ module Flannel
 
     def to_h
       if @preformatted
-        first_line = @lines[0][1..@lines[0].length]
-        if empty? first_line
-          @lines = @lines[1..@lines.length-1]          #remove first line if it's just an underscore
-        else
-          @lines[0] = first_line #remove underscore
-        end
-
-        last = @lines.length-1
-        last_line = @lines[last][1..@lines[0].length]
-        if empty? last_line
-          @lines = @lines[0..last-1]          #remove last line if it's just an underscore
-        else
-          @lines[last] = last_line #remove underscore
-        end
-
+        clean_stray_underscores
         html = @lines.join("\n")
         html = wrap html, "pre"
       else
@@ -47,6 +33,8 @@ module Flannel
     end
 
     def markup text
+      text = build_wiki_links text
+
       parts = text.match(/^(\W+) (.*)/)
 
       if parts
@@ -81,7 +69,7 @@ module Flannel
     end
 
     def wiki_link topic
-      @wiki_link.call(topic)
+      @wiki_link.call(permalink topic)
     end
 
     def permalink topic
@@ -89,5 +77,26 @@ module Flannel
       # thanks to ismasan http://snippets.dzone.com/posts/show/4457
       (Iconv.new('US-ASCII//TRANSLIT', 'utf-8').iconv topic).gsub(/[^\w\s\-\â€”]/,'').gsub(/[^\w]|[\_]/,' ').split.join('-').downcase
     end
+
+    def clean_stray_underscores
+      @lines = trim_underscore @lines, 0
+      @lines = trim_underscore @lines, @lines.length-1
+    end
+
+    def trim_underscore list, line_num
+      line = list[line_num][1..-1]
+
+      if empty? line
+        list.delete_at line_num     #remove line if it's just an underscore
+      else
+        list[line_num] = line #remove underscore
+      end
+      list
+    end
+
+    def build_wiki_links text
+       text.gsub(/-(.*)>/) { |match| %{<a href="#{wiki_link match}">#{match[1..-2]}</a>}}
+    end
   end
 end
+
