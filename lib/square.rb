@@ -40,7 +40,7 @@ module Flannel
       if parts
         case parts[1][0]
         when 42  # * - list
-          text = text[1..text.length].strip
+          text = text[1..-1].strip
           tag = "li"
           @post_wrap = "ul"
         when 61  # = - header
