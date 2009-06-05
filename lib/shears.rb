@@ -2,6 +2,10 @@ require 'square'
 
 module Flannel
   class Shears
+    def initialize params={}
+      @wiki_link= params[:wiki_link]
+    end
+
     def to_h markup
       squares = cut_into_squares markup
       squares.map { |square| square.to_h }.join("\n\n")
@@ -29,7 +33,7 @@ module Flannel
             square.preformatted = true
           end
 
-          square << line
+          square << Flannel::Stripe.stitch(:thread => line, :wiki_link => @wiki_link)
         end
       end
 
