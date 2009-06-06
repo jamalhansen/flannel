@@ -1,4 +1,5 @@
 require 'square'
+require 'stripe'
 
 module Flannel
   class Shears
@@ -6,7 +7,7 @@ module Flannel
       @wiki_link= params[:wiki_link]
     end
 
-    def to_h markup
+    def cut markup
       squares = cut_into_squares markup
       squares.map { |square| square.to_h }.join("\n\n")
     end
@@ -18,22 +19,41 @@ module Flannel
     def cut_into_squares markup
       squares = []
       square = Flannel::Square.new
-      @preformatted = false
+      preformatted = false
 
-      lines = markup.split("\n").each do |line|
-        if (empty?(line.strip) && !@preformatted)
-          if !square.blank?
+      markup.split("\n").each do |line|
+        preformatted_marker_line = false
+
+        if (empty?(line.strip) && !preformatted)
+          unless square.blank?
             squares << square
+            preformatted = false
           end
 
           square = Flannel::Square.new
         else
-          if line[0] == 95
-            @preformatted = !@preformatted
-            square.preformatted = true
+          parts = line.match(/^([=_*]+)(.*)/)
+          first = parts[1] if parts
+
+          if first
+            case first[0]
+            when 61 # equals (header)
+              square.style = :header
+              square.style_detail = first.length
+            when 95 # underscore (preformatted)
+              preformatted = !preformatted
+              square.style = :preformatted
+              preformatted_marker_line = true
+            when 42  # star (list)
+              square.style = :list
+            end
           end
 
-          square << Flannel::Stripe.stitch(:thread => line, :wiki_link => @wiki_link)
+          if preformatted_marker_line
+            square << parts[2] unless parts[2].strip == ""
+          else
+            square << line
+          end
         end
       end
 

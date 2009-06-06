@@ -3,18 +3,21 @@ require 'wrappable'
 module Flannel
   class Stripe
     include Wrappable
-    attr_reader :thread
+    attr_reader :weave
 
-    def self.stitch params={}
-       Flannel::Stripe.new params
+    def self.stitch weave="", params={}
+       Flannel::Stripe.new weave, params
     end
 
-    def initialize params={}
-      @thread = params[:thread]
+    def initialize weave="", params={}
+      @weave = weave
       @wiki_link = params[:wiki_link]
+      @style = params[:style]
     end
     
     def wiki_link topic
+      return topic unless @wiki_link
+      
       @wiki_link.call(permalink topic)
     end
 
@@ -25,19 +28,50 @@ module Flannel
     end
 
     def empty?
-      @thread == nil || @thread.strip == ""
+      @weave == nil || @weave.strip == ""
     end
 
     def build_wiki_links
-      @thread.gsub(/-(.*)>/) { |match| %{<a href="#{wiki_link match}">#{match[1..-2]}</a>}}
+      return @weave if preformatted
+      @weave.gsub(/-(.*)>/) { |match| %{<a href="#{wiki_link match}">#{match[1..-2]}</a>}}
     end
 
     def to_h
-      build_wiki_links
+      text = build_wiki_links
+      markup text
     end
 
     def trim_first
-      Flannel::Stripe.stitch(:thread => @thread[1..-1], :wiki_link => @wiki_link)
+      Flannel::Stripe.stitch(@weave[1..-1], :wiki_link => @wiki_link)
+    end
+
+    def preformatted
+      @style == :preformatted
+    end
+
+    def list
+      @style == :list
+    end
+
+    def header
+      @style == :header
+    end
+
+
+    def clean text
+      if list || header
+        parts = text.split(' ', 2)
+        return parts[1].strip
+      end
+
+      text
+    end
+
+    def markup text
+      return text if preformatted
+
+      tag = "li" if list
+      wrap(clean(text), tag)
     end
   end
 end

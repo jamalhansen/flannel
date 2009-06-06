@@ -1,7 +1,7 @@
 module Flannel
   module Wrappable
     def wrap content, tag
-      if empty?(content) || empty?(tag)
+      if empty_string?(content) || empty_string?(tag)
         return content
       end
 
@@ -10,7 +10,7 @@ module Flannel
       "<#{tag}>#{content}</#{tag}>"
     end
 
-    def empty? str
+    def empty_string? str
       str.nil? || str.strip == ""
     end
   end
