@@ -67,4 +67,14 @@ class ShearsTest < Test::Unit::TestCase
       assert_equal result, shears.cut(markup)
     end
   end
+
+  context "When square is list" do
+    should "tell square that it's a list, so that it will be wrapped in ul tags" do
+      shears = Flannel::Shears.new
+      markup = "* Yadda"
+      result = "<ul><li>Yadda</li></ul>"
+
+      assert_equal result, shears.cut(markup)
+    end
+  end
 end

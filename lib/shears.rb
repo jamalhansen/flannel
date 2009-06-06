@@ -37,14 +37,14 @@ module Flannel
 
           if first
             case first[0]
-            when 61 # equals (header)
+            when 61               # equals (header)
               square.style = :header
               square.style_detail = first.length
-            when 95 # underscore (preformatted)
+            when 95               # underscore (preformatted)
               preformatted = !preformatted
               square.style = :preformatted
               preformatted_marker_line = true
-            when 42  # star (list)
+            when 42               # star (list)
               square.style = :list
             end
           end

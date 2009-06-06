@@ -41,10 +41,6 @@ module Flannel
       markup text
     end
 
-    def trim_first
-      Flannel::Stripe.stitch(@weave[1..-1], :wiki_link => @wiki_link)
-    end
-
     def preformatted
       @style == :preformatted
     end
