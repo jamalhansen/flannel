@@ -20,6 +20,16 @@ class ShearsTest < Test::Unit::TestCase
     assert_equal :preformatted, squares[0].style
   end
 
+  should "separate preformatted blocks" do
+    markup = "_foo\n_\n\n_bar\n_"
+    shears = Flannel::Shears.new
+
+    squares = shears.cut_into_squares markup
+    assert_equal 2, squares.length
+    assert_equal :preformatted, squares[0].style
+    assert_equal :preformatted, squares[1].style
+  end
+
   should "strip preformatted markers when found" do
     markup = "_foo\n\nbar\n_"
     shears = Flannel::Shears.new
@@ -40,14 +50,14 @@ class ShearsTest < Test::Unit::TestCase
     assert_equal "<pre>foo\n\n   bar</pre>", shears.cut(markup)
   end
 
+  #TODO escape preformatted
+
   context "When building wiki links, Square" do
     should "not replace in preformatted text" do
       shears = Flannel::Shears.new
       result = shears.cut("_4 - 2 > 2 - 2\n_")
       assert_equal '<pre>4 - 2 > 2 - 2</pre>', result
     end
-
-    #html escape preformatted
   end
 
   context "When block starts with one or more equals signs, it" do

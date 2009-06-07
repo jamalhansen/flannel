@@ -24,7 +24,7 @@ module Flannel
     def permalink topic
       require 'iconv'
       # thanks to ismasan http://snippets.dzone.com/posts/show/4457
-      (Iconv.new('US-ASCII//TRANSLIT', 'utf-8').iconv topic).gsub(/[^\w\s\-\â€”]/,'').gsub(/[^\w]|[\_]/,' ').split.join('-').downcase
+      (Iconv.new('US-ASCII//TRANSLIT', 'utf-8').iconv topic).gsub(/[^\w\s\-]/,'').gsub(/[^\w]|[\_]/,' ').split.join('-').downcase
     end
 
     def empty?
@@ -50,7 +50,7 @@ module Flannel
     end
 
     def header
-      @style == :header
+      /^header/ =~ @style.to_s
     end
 
 

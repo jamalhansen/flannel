@@ -3,11 +3,12 @@ require 'wrappable'
 module Flannel
   class Square
     include Flannel::Wrappable
-    attr_accessor :style, :style_detail
+    attr_accessor :style
     
     def initialize params={}
-      @tags ={:preformatted => "pre", :list => "ul", :header => "h"}
+      @tags ={:preformatted => "pre", :list => "ul", :header_1 => "h1", :header_2 => "h2", :header_3 => "h3", :header_4 => "h4", :header_5 => "h5", :header_6 => "h6"}
       @stripes = []
+      @style = :paragraph
     end
 
     def << text
@@ -20,7 +21,19 @@ module Flannel
     end
 
     def blank?
-      @stripes.length == 0 || @stripes[0].empty?
+      (@stripes.length == 0 || all_stripes_blank)
+    end
+
+    def populated?
+      !blank?
+    end
+
+    def all_stripes_blank
+      @stripes.each do |stripe|
+        return false if !stripe.empty?
+      end
+
+      return true
     end
 
     def to_h
@@ -38,7 +51,6 @@ module Flannel
     def find_tag
       if @style && @tags.has_key?(@style)
         tag = @tags[@style]
-        tag = tag + @style_detail.to_s if tag == "h"
       else
         tag = "p"
       end

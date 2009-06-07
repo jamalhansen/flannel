@@ -2,29 +2,62 @@ require 'test_helper'
 require 'stripe'
 
 class SquareTest < Test::Unit::TestCase
-  should "accept strings with <<" do
-    square = Flannel::Square.new
-    square << "foo"
-    assert_equal "foo", square.to_s
-  end
+  context "basic behavior" do
+    setup do
+      @square = Flannel::Square.new
+    end
 
-  should "let you know if it's blank" do
-    square = Flannel::Square.new
-    assert square.blank?
-    square << "foo"
-    assert !square.blank?
-  end
+    should "accept strings with <<" do
+      @square << "foo"
+      assert_equal "foo", @square.to_s
+    end
 
-  should "return html" do
-    square = Flannel::Square.new
-    square <<  "foo"
-    assert_equal "<p>foo</p>", square.to_h
-  end
+    should "be blank when there are no stripes" do
+      assert @square.blank?
+      @square << "foo"
+      assert !@square.blank?
+    end
 
-  should "accept a style" do
-    square = Flannel::Square.new
-    square.style = :preformatted
-    assert_equal :preformatted, square.style
+    should "be blank when the first stripe is an empty string" do
+      @square <<  ""
+      assert @square.blank?
+    end
+
+    should "be blank when the first stripe is whitespace" do
+      @square <<  "  "
+      assert @square.blank?
+    end
+
+    should "be blank when the all stripes are empty strings" do
+      @square <<  ""
+      @square <<  ""
+      @square <<  ""
+      assert @square.blank?
+    end
+
+    should "be blank when the all stripes are whitespace" do
+      @square <<  " "
+      @square <<  " "
+      @square <<  ""
+      assert @square.blank?
+    end
+
+    should "not be blank when a stripe is not blank" do
+      @square <<  " "
+      @square <<  " "
+      @square <<  "foo"
+      assert !@square.blank?
+    end
+
+    should "return html" do
+      @square <<  "foo"
+      assert_equal "<p>foo</p>", @square.to_h
+    end
+
+    should "accept a style" do
+      @square.style = :preformatted
+      assert_equal :preformatted, @square.style
+    end
   end
 
   context "style" do
