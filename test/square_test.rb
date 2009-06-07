@@ -76,7 +76,7 @@ class SquareTest < Test::Unit::TestCase
     should "wrap in ul tags when unordered_list" do
       square = Flannel::Square.new
       square.style = :list
-      square << "* foo"
+      square << "foo"
       assert_equal "<ul><li>foo</li></ul>", square.to_h
     end
   end

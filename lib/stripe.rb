@@ -16,9 +16,11 @@ module Flannel
     end
     
     def wiki_link topic
-      return topic unless @wiki_link
-      
-      @wiki_link.call(permalink topic)
+      if @wiki_link
+        @wiki_link.call(permalink topic)
+      else
+        permalink topic[1..-2]
+      end
     end
 
     def permalink topic
@@ -33,7 +35,7 @@ module Flannel
 
     def build_wiki_links
       return @weave if preformatted
-      @weave.gsub(/-(.*)>/) { |match| %{<a href="#{wiki_link match}">#{match[1..-2]}</a>}}
+      @weave.gsub(/-\w(.*)\w>/) { |match| %{<a href="#{wiki_link match}">#{match[1..-2]}</a>}}
     end
 
     def to_h
@@ -49,25 +51,17 @@ module Flannel
       @style == :list
     end
 
-    def header
-      /^header/ =~ @style.to_s
-    end
-
-
-    def clean text
-      if list || header
-        parts = text.split(' ', 2)
-        return parts[1].strip
-      end
-
-      text
-    end
-
     def markup text
-      return text if preformatted
+      return html_escape text if preformatted
 
       tag = "li" if list
-      wrap(clean(text), tag)
+      wrap(text, tag)
+    end
+
+    def html_escape text
+      require 'cgi'
+
+      CGI::escapeHTML(text)
     end
   end
 end
