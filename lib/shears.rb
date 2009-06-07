@@ -3,68 +3,64 @@ require 'stripe'
 
 module Flannel
   class Shears
-    def initialize params={}
-      @wiki_link= params[:wiki_link]
-    end
-
     def cut markup
-      squares = cut_into_squares markup
-      squares.map { |square| square.to_h }.join("\n\n")
+      @squares = []
+      @square = Flannel::Square.new
+      @end_preformat = false
+
+      markup.split("\n").each { |line| cut_into_squares line }
+
+      @squares << @square
     end
 
-    def empty? str
-      str.nil? || str == ""
-    end
-
-    def cut_into_squares markup
-      squares = []
-      square = Flannel::Square.new
-      end_preformat = false
-
-      markup.split("\n").each do |line|
-        if need_new_square? square, line, end_preformat
-          squares << square unless square.blank?
-          square = Flannel::Square.new
-        else
-          stripe_text, end_preformat = add_to square, line
-          square << stripe_text if stripe_text
-        end
+    def cut_into_squares line
+     if need_new_square? line
+        shift_square
+      else
+        add line
       end
-
-      squares << square
     end
 
-    def need_new_square? square, line, end_preformat
-      square.style == :preformatted ? end_preformat : empty?(line.strip)
+    def shift_square
+      @squares << @square unless @square.blank?
+      @square = Flannel::Square.new
     end
-    
-    def add_to square, line
+
+    def need_new_square? line
+      @square.style == :preformatted ? @end_preformat : empty?(line.strip)
+    end
+
+    def add line
       preformatted_marker_line = false
       parts = line.match(/^([=_*]+)(.*)/)
-      first = parts[1] if parts 
+      first = parts[1] if parts
 
       if first
         case first[0]
         when 61               # equals (header)
           style = "header_#{first.length}"
-          square.style = style.to_sym
+          @square.style = style.to_sym
         when 95               # underscore (preformatted)
-          square.style = :preformatted
+          @square.style = :preformatted
           preformatted_marker_line = true
         when 42               # star (list)
-          square.style = :list
+          @square.style = :list
         end
       end
 
       if preformatted_marker_line
-        end_preformat = square.populated?
+        @end_preformat = @square.populated?
         stripe_text = parts[2] unless parts[2].strip == ""
       else
-        end_preformat = false
+        @end_preformat = false
         stripe_text = line
       end
 
-      [stripe_text, end_preformat]
+      @square << stripe_text unless stripe_text.nil?
+    end
+
+    def empty? str
+      str.nil? || str == ""
     end
   end
 end
