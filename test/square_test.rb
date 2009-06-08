@@ -80,4 +80,12 @@ class SquareTest < Test::Unit::TestCase
       assert_equal "<ul><li>foo</li></ul>", square.to_h
     end
   end
+
+  context "external links" do
+    should "convert [|] pattern to an external link" do
+      square = Flannel::Square.new
+      square << "yadda [yadda|http://example.com] yadda"
+      assert_equal '<p>yadda <a href="http://example.com" target="_blank">yadda</a> yadda</p>', square.to_h
+    end
+  end
 end

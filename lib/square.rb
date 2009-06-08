@@ -45,7 +45,36 @@ module Flannel
     
     def quilt lines
       output = lines.join("\n")
+      output = convert_external_links output
       return wrap(output, find_tag)
+    end
+
+    def preformatted
+      @style == :preformatted
+    end
+
+    def convert_external_links text
+      return text if preformatted
+      text.gsub(/\[([^\|]*\|[^\]]*)\]/) { |match| build_external_link match }
+    end
+
+    def build_external_link match
+      text, url, title = match[1..-2].split("|", 3)
+
+      url = format_link url.strip
+      text.strip!
+      title.strip! if title
+
+      if title
+        %{<a href="#{url}" title="#{title}" target="_blank">#{text}</a>}
+      else
+        %{<a href="#{url}" target="_blank">#{text}</a>}
+      end
+    end
+
+    def format_link url
+      return url if /:\/\// =~ url
+      "http://#{url}"
     end
 
     def find_tag
