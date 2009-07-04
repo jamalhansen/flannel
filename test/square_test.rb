@@ -87,5 +87,17 @@ class SquareTest < Test::Unit::TestCase
       square << "yadda [yadda|http://example.com] yadda"
       assert_equal '<p>yadda <a href="http://example.com" target="_blank">yadda</a> yadda</p>', square.to_h
     end
+
+    should "add http:// to external links" do
+      square = Flannel::Square.new
+      square << "yadda [yadda|example.com] yadda"
+      assert_equal '<p>yadda <a href="http://example.com" target="_blank">yadda</a> yadda</p>', square.to_h
+    end
+
+    should "add create title if provided to external links" do
+      square = Flannel::Square.new
+      square << "yadda [yadda|example.com|My title] yadda"
+      assert_equal '<p>yadda <a href="http://example.com" title="My title" target="_blank">yadda</a> yadda</p>', square.to_h
+    end
   end
 end

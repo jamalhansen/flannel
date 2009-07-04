@@ -1,8 +1,8 @@
-require 'quilter'
+require 'cutting_board'
 
 module Flannel
-def self.quilt markup, params={}
-    shears = Flannel::Quilter.new params
+  def self.quilt markup, params={}
+    shears = Flannel::CuttingBoard.new params
     shears.cut markup
   end
 end

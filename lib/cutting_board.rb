@@ -2,7 +2,7 @@ require 'shears'
 
 
 module Flannel
-  class Quilter
+  class CuttingBoard
     def initialize params={}
       @wiki_link= params[:wiki_link]
     end
