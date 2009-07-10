@@ -1,6 +1,6 @@
 = flannel
 
-Description goes here.
+A soft comfortable worn in markup language for Ruby.
 
 == Copyright
 
