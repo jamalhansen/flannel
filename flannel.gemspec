@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{flannel}
-  s.version = "0.0.1"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jamal Hansen"]
-  s.date = %q{2009-12-26}
+  s.date = %q{2009-12-29}
   s.email = %q{jamal.hansen@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -23,18 +23,23 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION.yml",
      "features/external_link.feature",
+     "features/feed.feature",
+     "features/fixtures/devlicious.rss",
      "features/fixtures/external_link.flannel",
      "features/fixtures/external_link.out",
+     "features/fixtures/feed.flannel",
+     "features/fixtures/feed.out",
      "features/fixtures/list.flannel",
      "features/fixtures/list.out",
      "features/fixtures/paragraph.flannel",
      "features/fixtures/paragraph.out",
      "features/fixtures/preformatted.flannel",
      "features/fixtures/preformatted.out",
+     "features/fixtures/rubyyot.rss",
      "features/fixtures/wiki_links.flannel",
      "features/fixtures/wiki_links.out",
+     "features/fixtures/wiki_links_for_lambda.flannel",
      "features/fixtures/wiki_links_for_lambda.out",
-     "features/fixtures/wiki_links_for_lamdba.flannel",
      "features/list.feature",
      "features/paragraph.feature",
      "features/preformatted_text.feature",
@@ -43,12 +48,14 @@ Gem::Specification.new do |s|
      "features/wiki_links.feature",
      "flannel.gemspec",
      "lib/cutting_board.rb",
+     "lib/feed_parser.rb",
      "lib/flannel.rb",
      "lib/shears.rb",
      "lib/square.rb",
      "lib/stripe.rb",
      "lib/wrappable.rb",
      "test/cutting_board_test.rb",
+     "test/feed_parser_test.rb",
      "test/flannel_test.rb",
      "test/shears_test.rb",
      "test/square_test.rb",
@@ -65,6 +72,7 @@ Gem::Specification.new do |s|
     "test/test_helper.rb",
      "test/stripe_test.rb",
      "test/cutting_board_test.rb",
+     "test/feed_parser_test.rb",
      "test/flannel_test.rb",
      "test/square_test.rb",
      "test/shears_test.rb"
@@ -75,12 +83,15 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<technicalpickles-shoulda>, [">= 0"])
+      s.add_runtime_dependency(%q<Hpricot>, [">= 0"])
+      s.add_development_dependency(%q<technicalpickles-shouldamocha>, [">= 0"])
     else
-      s.add_dependency(%q<technicalpickles-shoulda>, [">= 0"])
+      s.add_dependency(%q<Hpricot>, [">= 0"])
+      s.add_dependency(%q<technicalpickles-shouldamocha>, [">= 0"])
     end
   else
-    s.add_dependency(%q<technicalpickles-shoulda>, [">= 0"])
+    s.add_dependency(%q<Hpricot>, [">= 0"])
+    s.add_dependency(%q<technicalpickles-shouldamocha>, [">= 0"])
   end
 end
 
