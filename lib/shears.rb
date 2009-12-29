@@ -51,7 +51,7 @@ module Flannel
     end
 
     def strip_markers line
-      parts = line.match(/^([=_*]+)(.*)/)
+      parts = line.match(/^([=_*&]+)(.*)/)
 
       if parts
         set_style parts[1]
@@ -61,7 +61,7 @@ module Flannel
     end
 
     def set_style marker
-        if marker
+      if marker
         case marker[0]
         when 61               # equals (header)
           style = "header_#{marker.length}"
@@ -71,6 +71,8 @@ module Flannel
           @preformatted_marker_line = true
         when 42               # star (list)
           @square.style = :list
+	when 38              # ampersand (feed)
+          @square.style = :feed
         end
       end
     end

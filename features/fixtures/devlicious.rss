@@ -1,0 +1,959 @@
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:wfw="http://wellformedweb.org/CommentAPI/"><channel><title>Sergio Pereira : JavaScript-Demystified</title><link>http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx</link><description>Tags: JavaScript-Demystified</description><dc:language>en</dc:language><generator>CommunityServer 2008.5 SP1 (Build: 31106.3070)</generator><item><title>JavaScript and its love for zeroes</title><link>http://devlicio.us/blogs/sergio_pereira/archive/2009/09/19/javascript-and-its-love-for-zeroes.aspx</link><pubDate>Sat, 19 Sep 2009 13:54:00 GMT</pubDate><guid isPermaLink="false">40756a8b-6212-4073-9d98-6c26781577de:51520</guid><dc:creator>sergiopereira</dc:creator><slash:comments>5</slash:comments><wfw:commentRss xmlns:wfw="http://wellformedweb.org/CommentAPI/">http://devlicio.us/blogs/sergio_pereira/rsscomments.aspx?PostID=51520</wfw:commentRss><comments>http://devlicio.us/blogs/sergio_pereira/archive/2009/09/19/javascript-and-its-love-for-zeroes.aspx#comments</comments><description>&lt;div class="note"&gt;
+	This post is part of a series called &lt;a href="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx"&gt;
+	JavaScript Demystified&lt;/a&gt;.
+&lt;/div&gt;
+ 
+&lt;p&gt;Answer quick. Do you know what date is being created here?&lt;/p&gt;
+&lt;pre name="code" class="js:nogutter"&gt;var year = &amp;#39;2009&amp;#39;, month = &amp;#39;09&amp;#39;, day = &amp;#39;01&amp;#39;;
+var date = new Date( 
+             parseInt(year),
+			 parseInt(month),
+			 parseInt(day)
+			 );	&lt;/pre&gt;
+ 
+&lt;p&gt;
+At first glance, it wouldn&amp;#39;t surprising that someone guesseed &lt;i&gt;September 1&lt;sup&gt;st&lt;/sup&gt; 2009&lt;/i&gt;.
+However, I&amp;#39;d not be writing this post if that was the correct answer, right?
+&lt;/p&gt;
+&lt;p&gt;
+There&amp;#39;s an interesting and tricky thing with the JavaScript &lt;code&gt;parseInt&lt;/code&gt; function: it
+can parse strings with a numeric value in the decimal radix, but also in other radices. See the
+following examples.
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js:nogutter"&gt;//passing the radix explicitly
+parseInt(&amp;#39;1011&amp;#39;, 10); // ==&amp;gt; 1011
+parseInt(&amp;#39;1011&amp;#39;,  2); // ==&amp;gt; 11
+parseInt(&amp;#39;1011&amp;#39;,  8); // ==&amp;gt; 521
+parseInt(&amp;#39;1011&amp;#39;, 16); // ==&amp;gt; 4113
+&lt;/pre&gt;
+ 
+&lt;p&gt;Maybe you thought that if you didn&amp;#39;t pass the radix, then it would default to 10 because
+it&amp;#39;s the obvious behavior. Well, no. In JavaScript the default behavior is to try to
+identify one of the literal formats and interpret that. So here&amp;#39;s that in action:&lt;/p&gt;
+ 
+&lt;pre name="code" class="js:nogutter"&gt;//leaving JavaScript on its own
+parseInt(&amp;#39;1011&amp;#39;); // ==&amp;gt; 1011 (decimal literal)
+parseInt(&amp;#39;0x12&amp;#39;); // ==&amp;gt; 18   (hexadecimal literal)
+parseInt(&amp;#39;0511&amp;#39;); // ==&amp;gt; 329  (octal literal)
+parseInt(&amp;#39;0182&amp;#39;); // ==&amp;gt; 1    (whaaaa?!?!)
+&lt;/pre&gt;
+ 
+&lt;img src="http://devlicio.us/cfs-file.ashx/__key/CommunityServer.Blogs.Components.WeblogFiles/sergio_5F00_pereira.2009.09/js_2D00_newyear.png" align="left" alt="" /&gt;
+ 
+&lt;p&gt;
+If you are familiar with the literal notation for integer numbers in JavaScript,
+and after I explained the default behavior of &lt;code&gt;parseInt&lt;/code&gt;, then
+you probaly understood the results shown above. Well, maybe the last one deserves 
+some comments.
+&lt;/p&gt;
+&lt;p&gt;
+When JavaScript is parsing the string, if it finds a digit (number or alpha) that is invalid
+in the chosen radix, it stops right there and parses only the portion of the string that
+comes before that digit. So, since we started &lt;code&gt;&amp;#39;0182&amp;#39;&lt;/code&gt; with a leading zero, the 
+octal radix is assumed. Then, because &lt;b&gt;8&lt;/b&gt; is not a valid octal digit, only &lt;code&gt;&amp;#39;01&amp;#39;&lt;/code&gt;
+will be parsed, which becomes &lt;b&gt;1&lt;/b&gt;.
+&lt;/p&gt;
+ 
+&lt;div class="note"&gt;&lt;span class="legend"&gt;Tip #1:&lt;/span&gt;
+If there&amp;#39;s any chance the string value you plan to parse into an integer number has
+a leading zero (or a less likely &lt;b&gt;0x&lt;/b&gt;,) then be safe and pass the radix parameter
+to your &lt;code&gt;parseInt&lt;/code&gt; call. If you&amp;#39;re extra paranoid, then always pass the radix.
+&lt;/div&gt;
+ 
+ 
+&lt;h3&gt;Back to our original question&lt;/h3&gt;
+ 
+&lt;p&gt;Armed with the clarification made above, we can expand our example like this:&lt;/p&gt;
+&lt;pre name="code" class="js:nogutter"&gt;//given:
+var year = &amp;#39;2009&amp;#39;, month = &amp;#39;09&amp;#39;, day = &amp;#39;01&amp;#39;;
+// then the following statement:
+var date = new Date( 
+         parseInt(year),
+         parseInt(month),
+         parseInt(day)
+         );	
+//...is equivalent to:
+var date = new Date( 
+         2009,
+         0,  // ===&amp;gt; oopsie
+         1
+         );	&lt;/pre&gt;
+ 
+&lt;p&gt;Hmmm, a zero in the month parameter. Will we have an error here? No, here comes the second potential surprise of this post.&lt;/p&gt;
+ 
+&lt;div class="note"&gt;&lt;span class="legend"&gt;Tip #2:&lt;/span&gt;
+When creating a new date using &lt;code&gt;new Date(year, month, day)&lt;/code&gt;, the &lt;code&gt;month&lt;/code&gt;
+parameter, and &lt;b&gt;only&lt;/b&gt; the month parameter is zero-based (0 to 11).
+&lt;/div&gt;
+ 
+&lt;p&gt;So, in case the tips and the picture in this text were not enough to help you guessing the
+date being created, here goes another completely gratuitous one with the answer.
+ 
+&lt;p&gt;&lt;img src="http://devlicio.us/cfs-file.ashx/__key/CommunityServer.Blogs.Components.WeblogFiles/sergio_5F00_pereira.2009.09/js_2D00_newyear2.png" alt="" /&gt;&lt;/p&gt;
+&lt;div style="clear:both;"&gt;&lt;/div&gt;&lt;img src="http://devlicio.us/aggbug.aspx?PostID=51520" width="1" height="1"&gt;</description><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/Development/default.aspx">Development</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/Tips-and-Tricks/default.aspx">Tips-and-Tricks</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript/default.aspx">JavaScript</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx">JavaScript-Demystified</category></item><item><title>JavaScript: Not your father's inheritance model - Part 2</title><link>http://devlicio.us/blogs/sergio_pereira/archive/2009/06/12/javascript-not-your-father-s-inheritance-model-part-2.aspx</link><pubDate>Fri, 12 Jun 2009 23:26:00 GMT</pubDate><guid isPermaLink="false">40756a8b-6212-4073-9d98-6c26781577de:47885</guid><dc:creator>sergiopereira</dc:creator><slash:comments>5</slash:comments><wfw:commentRss xmlns:wfw="http://wellformedweb.org/CommentAPI/">http://devlicio.us/blogs/sergio_pereira/rsscomments.aspx?PostID=47885</wfw:commentRss><comments>http://devlicio.us/blogs/sergio_pereira/archive/2009/06/12/javascript-not-your-father-s-inheritance-model-part-2.aspx#comments</comments><description>&lt;div class="note"&gt;
+	This post is part of a series called &lt;a href="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx"&gt;
+	JavaScript Demystified&lt;/a&gt;.
+&lt;/div&gt;
+ 
+&lt;p&gt;&lt;i&gt;This particular chapter is further divided in two parts. Read &lt;a href="http://devlicio.us/blogs/sergio_pereira/archive/2009/06/12/javascript-not-your-father-s-inheritance-model-part-1.aspx"&gt;Part 1&lt;/a&gt;.&lt;/i&gt;&lt;/p&gt;
+ 
+  
+ 
+ 
+&lt;h3&gt;Build your own hierarchy&lt;/h3&gt;
+ 
+&lt;p&gt;Let&amp;#39;s pretend we are building some scripts that deal with musical instruments. We could define our own &lt;code&gt;Guitar&lt;/code&gt; &lt;strike&gt;class&lt;/strike&gt; type like this:
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js:nogutter"&gt;//The constructor
+function Guitar(brand, model) {
+    this.brand = brand;
+    this.model = model;
+    this.strings = [&amp;#39;E&amp;#39;, &amp;#39;A&amp;#39;, &amp;#39;D&amp;#39;, &amp;#39;G&amp;#39;, &amp;#39;B&amp;#39;, &amp;#39;e&amp;#39;];
+}
+ 
+//Instance methods
+Guitar.prototype = {
+    play: function (chord) {
+        alert(&amp;#39;Playing &amp;#39; + chord); 
+    },
+    toString: function () {
+        return &amp;#39;(Guitar: &amp;#39; + 
+            this.brand + &amp;#39; &amp;#39; +
+            this.model + &amp;#39;)&amp;#39;;
+    }
+};
+ 
+var guitar1 = new Guitar(&amp;#39;Gibson&amp;#39;, &amp;#39;Les Paul&amp;#39;);&lt;/pre&gt;
+ 
+&lt;p&gt;What may not be apparent by just looking at the code for the first time is that &lt;code&gt;guitar1&lt;/code&gt;&amp;#39;s Prototype will be &lt;code&gt;Guitar.prototype&lt;/code&gt;, which means that &lt;code&gt;guitar1&lt;/code&gt; inherits from &lt;code&gt;Guitar.prototype&lt;/code&gt;. Also &lt;code&gt;guitar1.constructor === Guitar&lt;/code&gt;.
+&lt;/p&gt;
+ 
+&lt;p&gt;When the last line in the above example is executed, the JavaScript runtime will take care of initializing a new object that has &lt;code&gt;Guitar.prototype&lt;/code&gt; as its Prototype and makes its &lt;code&gt;constructor&lt;/code&gt; property point to the &lt;code&gt;Guitar&lt;/code&gt; function.
+&lt;/p&gt;
+ 
+&lt;p&gt;But what if we want to create a different type of guitars and still reuse the existing &lt;code&gt;Guitar&lt;/code&gt; type. We could do this:
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js:nogutter"&gt;function BassGuitar(brand, model) {
+    //call the constructor of our base type
+    Guitar.apply(this, [brand, model] );
+    //change or add anything we wish
+    this.strings = [&amp;#39;E&amp;#39;, &amp;#39;A&amp;#39;, &amp;#39;D&amp;#39;, &amp;#39;G&amp;#39;];
+}
+ 
+//Copy the Prototype of our base type
+BassGuitar.prototype = Object.create(Guitar.prototype);
+ 
+//Override whatever we want:
+BassGuitar.prototype.toString = function () {
+    return &amp;#39;(BassGuitar: &amp;#39; + 
+        this.brand + &amp;#39; &amp;#39; +
+        this.model + &amp;#39;)&amp;#39;;
+};
+ 
+var bass1 = new BassGuitar(&amp;#39;Peavey&amp;#39;, &amp;#39;Cirrus&amp;#39;);
+bass1.toString(); //=&amp;gt; &amp;#39;(BassGuitar: Peavey Cirrus)&amp;#39;
+alert(bass1.strings); //=&amp;gt; [ &amp;#39;E&amp;#39;, &amp;#39;A&amp;#39;, &amp;#39;D&amp;#39;, &amp;#39;G&amp;#39; ]&lt;/pre&gt;
+ 
+&lt;p style="text-align:center;"&gt;&lt;img src="http://devlicio.us/cfs-file.ashx/__key/CommunityServer.Blogs.Components.WeblogFiles/sergio_5F00_pereira.2009.06/js_5F00_inh_5F00_5.png" alt="" /&gt;&lt;/p&gt;
+ 
+ 
+&lt;p&gt;&lt;b&gt;But there&amp;#39;s a problem with the above code.&lt;/b&gt; There isn&amp;#39;t a method &lt;code&gt;Object.create()&lt;/code&gt;. Yeah, that&amp;#39;s one of the design omissions in JavaScript. Any prototype-based language needs an easy way to let use create objects from other objects.
+&lt;/p&gt;
+ 
+&lt;p&gt;Thankfully JavaScript is also dynamically typed, so we can add that function ourselves. Here I&amp;#39;m borrowing from &lt;a href="http://javascript.crockford.com/prototypal.html"&gt;Douglas Crockford&lt;/a&gt;.
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js:nogutter"&gt;//add this to the very beginning of your scripts
+if (typeof Object.create !== &amp;#39;function&amp;#39;) {
+    Object.create = function (o) {
+        function F() {}
+        F.prototype = o;
+        return new F();
+    };
+}&lt;/pre&gt;
+ 
+&lt;p&gt;I&amp;#39;ll leave the interpretation of the above function as an exercise to the reader. Once you understand what it is doing you will have mastered prototypes and constructors.
+&lt;/p&gt;
+ 
+&lt;h3&gt;Handy Prototype tricks&lt;/h3&gt;
+ 
+&lt;p&gt;Knowing what we know now and once again leveraging JavaScript&amp;#39;s dynamism we can fix one of the things that has always annoyed me in JavaScript: the lack of a &lt;code&gt;trim()&lt;/code&gt; method on strings.
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js:nogutter"&gt;String.prototype.trim = function () {
+    return this.replace( /^\s*(\S*(\s+\S+)*)\s*$/, &amp;quot;$1&amp;quot;); 
+}; 
+var text = &amp;#39; some user-entered value   &amp;#39;;
+alert( text.trim() ); // =&amp;gt; &amp;#39;some user-entered value&amp;#39;&lt;/pre&gt;
+ 
+&lt;p&gt;How about an easy way to pad numbers with zeroes?
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js:nogutter"&gt;Number.prototype.padLeft = function (width) {
+    var text = this.toString();
+    for(; text.length &amp;lt; width; ){
+        text = &amp;#39;0&amp;#39; + text;
+    }
+    return text;
+};
+ 
+var num = 1234;
+alert(num.padLeft(6)); // =&amp;gt; 001234&lt;/pre&gt;
+ 
+ 
+&lt;h3&gt;Why do I need to know all this stuff?&lt;/h3&gt;
+ 
+&lt;p&gt;Well, you don&amp;#39;t. But why even bother writing JavaScript code if you&amp;#39;re not willing to learn how it works? &lt;/p&gt;
+ 
+&lt;p&gt;As we have been seeing during this series, JavaScript bears only some syntax similarities with C# or Java. Underneath the surface it has been designed very differently. The web is riddled with attempts to mimic class-based inheritance in JavaScript only because programmers don&amp;#39;t want to learn and leverage prototype-based logic.&lt;/p&gt;
+ 
+&lt;p&gt;My humble advice is that you will feel happier and smarter if you chose to learn how to use the language as it was intended.&lt;/p&gt;
+ 
+&lt;div style="clear:both;"&gt;&lt;/div&gt;&lt;img src="http://devlicio.us/aggbug.aspx?PostID=47885" width="1" height="1"&gt;</description><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/Series/default.aspx">Series</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript/default.aspx">JavaScript</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx">JavaScript-Demystified</category></item><item><title>JavaScript: Not your father's inheritance model - Part 1</title><link>http://devlicio.us/blogs/sergio_pereira/archive/2009/06/12/javascript-not-your-father-s-inheritance-model-part-1.aspx</link><pubDate>Fri, 12 Jun 2009 23:03:00 GMT</pubDate><guid isPermaLink="false">40756a8b-6212-4073-9d98-6c26781577de:47882</guid><dc:creator>sergiopereira</dc:creator><slash:comments>9</slash:comments><wfw:commentRss xmlns:wfw="http://wellformedweb.org/CommentAPI/">http://devlicio.us/blogs/sergio_pereira/rsscomments.aspx?PostID=47882</wfw:commentRss><comments>http://devlicio.us/blogs/sergio_pereira/archive/2009/06/12/javascript-not-your-father-s-inheritance-model-part-1.aspx#comments</comments><description>&lt;div class="note"&gt;
+	This post is part of a series called &lt;a href="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx"&gt;
+	JavaScript Demystified&lt;/a&gt;.
+&lt;/div&gt;
+ 
+&lt;p&gt;&lt;i&gt;This particular chapter is further divided in two parts. Read &lt;a href="http://devlicio.us/blogs/sergio_pereira/archive/2009/06/12/javascript-not-your-father-s-inheritance-model-part-2.aspx"&gt;Part 2&lt;/a&gt;.&lt;/i&gt;&lt;/p&gt;
+ 
+ 
+ 
+&lt;p&gt;In a previous installment in this series we saw how we could create constructor functions in JavaScript. Back then I just mentioned that we don&amp;#39;t have classes in JavaScript and that there&amp;#39;s this weird &lt;code&gt;prototype&lt;/code&gt; property in every object.
+&lt;/p&gt;
+ 
+&lt;p&gt;Let&amp;#39;s dig into those concepts a little more and try to understand how inheritance is achieved in JavaScript.
+&lt;/p&gt;
+ 
+&lt;h3&gt;Inheritance as we often know it&lt;/h3&gt;
+ 
+&lt;p&gt;For myself and probably the majority of you reading this blog, inheritance in an Object Oriented programming language is directly associated with the concept of classes.
+&lt;/p&gt;
+ 
+&lt;p&gt;When we work with C#, VB, Java, Ruby, and many other popular programming languages, each of our objects is of some type, which is represented by a class. Our objects automatically inherit functionality from their associated class often called base or super class, and any other classes that the base class itself is associated with (i.e. derives from.)
+&lt;/p&gt;
+&lt;p&gt;That&amp;#39;s nothing new to you, I&amp;#39;m sure. I&amp;#39;m just re-hashing that in the previous paragraph to make a comparison later. Let&amp;#39;s call this model class-based inheritance.
+&lt;/p&gt;
+ 
+ 
+&lt;h3&gt;That&amp;#39;s not the end of the story&lt;/h3&gt;
+ 
+&lt;p&gt;This may come as a surprise to some people, but class-based inheritance is not the only way to obtain Object Oriented inheritance (by saying Object Oriented I automatically excluded those of you that thought Copy/Paste Inheritance was one of them.)
+&lt;/p&gt;
+ 
+&lt;p&gt;It just so happens that the JavaScript language designers chose another inheritance model. And they are not alone in that choice. By opting for a &lt;a href="http://en.wikipedia.org/wiki/Prototype-based_programming"&gt;prototype-based inheritance model&lt;/a&gt; , JavaScript joined the ranks of other programming languages such as &lt;a href="http://selflanguage.org/"&gt;Self&lt;/a&gt;  , &lt;a href="http://www.lua.org/"&gt;Lua&lt;/a&gt; ,  and  &lt;a href="http://prog.vub.ac.be/research/agora/"&gt;Agora&lt;/a&gt;. 
+&lt;/p&gt;
+ 
+ 
+&lt;h3&gt;The prototype is the king&lt;/h3&gt;
+ 
+&lt;p&gt;Objects in JavaScript don&amp;#39;t inherit from classes; they inherit straight from other objects. The object they inherit from is called their Prototype (I&amp;#39;m using a capital P here to avoid confusion down the line.) The object&amp;#39;s Prototype is assigned right at construction time.
+&lt;/p&gt;
+ 
+&lt;p&gt;You may be intrigued and say: But when I create my objects I don&amp;#39;t remember specifying any Prototype stuff. What gives? 
+&lt;/p&gt;
+ 
+&lt;p&gt;Let&amp;#39;s see what happens then. When you create a plain Object using either of the following syntaxes
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js:nogutter"&gt;var obj1 = new Object();
+obj1.name = &amp;#39;box&amp;#39;
+//or
+var obj2 = { name: &amp;#39;door&amp;#39; };
+&lt;/pre&gt;
+ 
+&lt;p&gt;JavaScript will automatically assign a Prototype to each of these objects. This prototype will be &lt;code&gt;Object.prototype&lt;/code&gt;. 
+&lt;/p&gt;
+ 
+&lt;p style="text-align:center;"&gt;&lt;img src="http://devlicio.us/cfs-file.ashx/__key/CommunityServer.Blogs.Components.WeblogFiles/sergio_5F00_pereira.2009.06/js_5F00_inh_5F00_1.png" alt="" /&gt;&lt;/p&gt;
+ 
+&lt;p&gt;Similarly, let&amp;#39;s see what happens with a few of the other object types in JavaScript.
+&lt;/p&gt;
+ 
+&lt;p style="text-align:center;"&gt;&lt;img src="http://devlicio.us/cfs-file.ashx/__key/CommunityServer.Blogs.Components.WeblogFiles/sergio_5F00_pereira.2009.06/js_5F00_inh_5F00_2.png" alt="" /&gt;&lt;/p&gt;
+ 
+&lt;p&gt;The Prototype objects is how every object in JavaScript is born with inherited functionality. For example, the &lt;code&gt;substring()&lt;/code&gt; method that every &lt;code&gt;String&lt;/code&gt; object has is a method defined in the object &lt;code&gt;String.Prototype&lt;/code&gt;. 
+&lt;/p&gt;
+ 
+&lt;p style="text-align:center;"&gt;&lt;img src="http://devlicio.us/cfs-file.ashx/__key/CommunityServer.Blogs.Components.WeblogFiles/sergio_5F00_pereira.2009.06/js_5F00_inh_5F00_3.png" alt="" /&gt;&lt;/p&gt;
+ 
+&lt;p&gt;The prototype objects themselves also inherit from &lt;code&gt;Object.prototype&lt;/code&gt;, that&amp;#39;s how every object of any type has a &lt;code&gt;toString()&lt;/code&gt; method.
+&lt;/p&gt;
+ 
+&lt;p style="text-align:center;"&gt;&lt;img src="http://devlicio.us/cfs-file.ashx/__key/CommunityServer.Blogs.Components.WeblogFiles/sergio_5F00_pereira.2009.06/js_5F00_inh_5F00_4.png" alt="" /&gt;&lt;/p&gt;
+ 
+&lt;p&gt;When you try to access &lt;code&gt;1234.constructor&lt;/code&gt;, as an example, the runtime will look for a &lt;code&gt;constructor&lt;/code&gt; property on our object (the number 1234). It doesn&amp;#39;t have one so the next step taken is to check if that object&amp;#39;s Prototype has it. The Prototype for 1234 is &lt;code&gt;Number.prototype&lt;/code&gt; and it doesn&amp;#39;t have that property either. The runtime then looks on the Prototype of &lt;code&gt;Number.prototype&lt;/code&gt;, which is &lt;code&gt;Object.prototype&lt;/code&gt;. That last object does have a &lt;code&gt;constructor&lt;/code&gt; property, so that is returned. If it didn&amp;#39;t, &lt;code&gt;undefined&lt;/code&gt; would have been returned instead.
+&lt;/p&gt;
+ 
+&lt;p&gt;In &lt;a href="http://devlicio.us/blogs/sergio_pereira/archive/2009/06/12/javascript-not-your-father-s-inheritance-model-part-2.aspx"&gt;Part 2&lt;/a&gt; we will see how to create our own Prototypes.
+&lt;/p&gt;&lt;div style="clear:both;"&gt;&lt;/div&gt;&lt;img src="http://devlicio.us/aggbug.aspx?PostID=47882" width="1" height="1"&gt;</description><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/Series/default.aspx">Series</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript/default.aspx">JavaScript</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx">JavaScript-Demystified</category></item><item><title>JavaScript: Avoid the Evil eval</title><link>http://devlicio.us/blogs/sergio_pereira/archive/2009/03/31/javascript-avoid-the-evil-eval.aspx</link><pubDate>Tue, 31 Mar 2009 22:23:00 GMT</pubDate><guid isPermaLink="false">40756a8b-6212-4073-9d98-6c26781577de:45311</guid><dc:creator>sergiopereira</dc:creator><slash:comments>5</slash:comments><wfw:commentRss xmlns:wfw="http://wellformedweb.org/CommentAPI/">http://devlicio.us/blogs/sergio_pereira/rsscomments.aspx?PostID=45311</wfw:commentRss><comments>http://devlicio.us/blogs/sergio_pereira/archive/2009/03/31/javascript-avoid-the-evil-eval.aspx#comments</comments><description>&lt;div class="note"&gt;
+	This post is part of a series called &lt;a href="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx"&gt;JavaScript Demystified&lt;/a&gt;.
+&lt;/div&gt;
+	&lt;p&gt;
+		I&amp;#39;m pretty sure by now you have heard at least once that &lt;a href="http://blogs.msdn.com/ericlippert/archive/2003/11/01/53329.aspx"&gt;&lt;code&gt;eval&lt;/code&gt; is evil&lt;/a&gt;. Some
+		nuggets from Eric Lippert&amp;#39;s post:
+	&lt;/p&gt;
+ 
+	&lt;blockquote&gt;if you are considering using eval then there is probably a better way&lt;/blockquote&gt;
+	&lt;blockquote&gt;People, eval starts a compiler.&lt;/blockquote&gt;
+ 
+	&lt;p&gt;
+		I&amp;#39;m also pretty sure I don&amp;#39;t need to tell you that anytime you have an explicit &lt;code&gt;eval()&lt;/code&gt; in your
+		code, there&amp;#39;s a good chance it&amp;#39;s there because 
+		&lt;a href="http://devlicio.us/blogs/sergio_pereira/archive/2008/05/03/give-javascript-a-chance.aspx"&gt;you&amp;#39;re not taking JavaScript seriously&lt;/a&gt; yet.
+	&lt;/p&gt;
+	&lt;pre name="code" class="js"&gt;//mandatory square brackets notation example
+//------------------------------------------
+var myObject = new MyObject();
+var prop1 = eval( &amp;#39;myObject.&amp;#39; + somePropertyName ); // BAD!
+var prop2 = myObject[ somePropertyName ]; // Better&lt;/pre&gt;
+ 
+	&lt;h3&gt;That&amp;#39;s not the end of all &lt;code&gt;eval()&lt;/code&gt;&lt;/h3&gt;
+	&lt;p&gt;
+		At this point some people might be feeling relieved: &lt;i&gt;&amp;quot;Phew! That was
+		easier than it sounded. Getting rid of eval is a piece of cake.&amp;quot;&lt;/i&gt; Well,
+		I&amp;#39;m not going to say it&amp;#39;s significantly harder than that, but we&amp;#39;re not
+		done prunning &lt;code&gt;eval()&lt;/code&gt; from our code just yet.
+	&lt;/p&gt;
+	&lt;p&gt;
+		You see, &lt;code&gt;eval()&lt;/code&gt; is like that coward opponent that sneaks in the 
+		dark to attack you from behind. Let&amp;#39;s find some of &lt;code&gt;eval&lt;/code&gt;&amp;#39;s 
+		favorite hiding places.
+	&lt;/p&gt;
+ 
+	&lt;h3&gt;There&amp;#39;s a time when you need a timer&lt;/h3&gt;
+	&lt;p&gt;
+		Two very popular JavaScript functions used to create timers are &lt;code&gt;setTimeout()&lt;/code&gt; and 
+		&lt;code&gt;setInterval()&lt;/code&gt;. Here&amp;#39;s how you still find code being written to use them.
+	&lt;/p&gt;
+	&lt;pre name="code" class="js"&gt;function doSomething(someValue){
+	//...
+}
+ 
+setTimeout(&amp;quot;doSomething(&amp;#39;3 seconds elapsed. Time is up.&amp;#39;);&amp;quot;, 3000);&lt;/pre&gt;
+ 
+ 
+	&lt;p&gt;
+		As it turns out, this is just another occurrence of &lt;code&gt;eval()&lt;/code&gt; revealing
+		how incompetent we can still be in this programming language. Here&amp;#39;s
+		a better way to write that code.
+	&lt;/p&gt;
+	&lt;pre name="code" class="js"&gt;setTimeout( function(){ 
+                doSomething(&amp;#39;3 seconds elapsed. Time is up.&amp;#39;);
+            }, 
+            3000);&lt;/pre&gt;
+ 
+	&lt;h3&gt;Thank God I didn&amp;#39;t know functions had constructors&lt;/h3&gt;
+	&lt;p&gt;
+		The other secret place that &lt;code&gt;eval()&lt;/code&gt; likes to hang out is
+		in the &lt;code&gt;Function&lt;/code&gt; constructor. Fortunately this isn&amp;#39;t exactly a
+		popular way of creating functions. I&amp;#39;ll say it: I didn&amp;#39;t even know about 
+		this constructor until less than a couple of years ago.
+	&lt;/p&gt;
+	&lt;p&gt;
+		So, in case you don&amp;#39;t know what I&amp;#39;m talking about here, I&amp;#39;ll show you
+		how to use the function constructor just to imemdiately tell you to not do it.
+	&lt;/p&gt;
+ 
+	&lt;pre name="code" class="js"&gt;var sum = new Function(&amp;#39;op1&amp;#39;, &amp;#39;op2&amp;#39;, &amp;#39;return op1 + op2;&amp;#39;);
+var result = sum(10, 20); // ==&amp;gt; 30&lt;/pre&gt;
+ 
+	&lt;p&gt;
+		The above code is roughly equivalent to the explicit &lt;code&gt;eval()&lt;/code&gt; usage below.
+	&lt;/p&gt;
+	&lt;pre name="code" class="js"&gt;eval(&amp;quot;var sum = function (op1, op2) { return op1 + op2; }&amp;quot;);
+var result = sum(10, 20); // ==&amp;gt; 30&lt;/pre&gt;
+	&lt;p&gt;
+		We don&amp;#39;t come up with the need to use the function constructor often, but I&amp;#39;ll
+		admit that when we do, it&amp;#39;s usually hard to replace it with another way that
+		doesn&amp;#39;t use &lt;code&gt;eval()&lt;/code&gt;.
+	&lt;/p&gt;
+ 
+&lt;div class="note"&gt;&lt;span class="legend"&gt;Minor update:&lt;/span&gt;
+I was doing some snooping around with Firebug and Reflector and found that WebUIValidation.js (embedded in System.Web.dll)
+does use &lt;code&gt;eval()&lt;/code&gt; in some ways that I just pointed out to be unnecessary. If that is of any comfort to anyone
+that has done the same in the past, there you have probably the largest deployment of misused &lt;code&gt;eval()&lt;/code&gt; I know of.
+&lt;/div&gt;&lt;div style="clear:both;"&gt;&lt;/div&gt;&lt;img src="http://devlicio.us/aggbug.aspx?PostID=45311" width="1" height="1"&gt;</description><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/Series/default.aspx">Series</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript/default.aspx">JavaScript</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx">JavaScript-Demystified</category></item><item><title>JavaScript, inner functions and private members</title><link>http://devlicio.us/blogs/sergio_pereira/archive/2009/02/24/javascript-inner-functions-and-private-members.aspx</link><pubDate>Tue, 24 Feb 2009 14:31:00 GMT</pubDate><guid isPermaLink="false">40756a8b-6212-4073-9d98-6c26781577de:44569</guid><dc:creator>sergiopereira</dc:creator><slash:comments>15</slash:comments><wfw:commentRss xmlns:wfw="http://wellformedweb.org/CommentAPI/">http://devlicio.us/blogs/sergio_pereira/rsscomments.aspx?PostID=44569</wfw:commentRss><comments>http://devlicio.us/blogs/sergio_pereira/archive/2009/02/24/javascript-inner-functions-and-private-members.aspx#comments</comments><description>&lt;div class="note"&gt;
+	This post is part of a series called &lt;a href="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx"&gt;JavaScript Demystified&lt;/a&gt;.
+&lt;/div&gt;
+ 
+&lt;p&gt;
+	In &lt;a href="http://devlicio.us/blogs/sergio_pereira/archive/2009/02/23/javascript-time-to-grok-closures.aspx"&gt;our last installment&lt;/a&gt; in this short JavaScript series we
+	took a look at closures. In some of the examples, we saw functions being
+	declared (and returned) inside other functions. The capability of declaring
+	a function inside another one is not common to all languages &amp;mdash; C# 
+	only added this ability in version 2.0, via anonymous delegates. 
+&lt;/p&gt;
+ 
+&lt;p&gt;
+	Here&amp;#39;s an example of inner functions in use.
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js"&gt;function printPriceLong(name, price, quantity, currency) {
+	var formatCurrency = function(value) {
+		return value + &amp;#39; &amp;#39; + currency;
+	};
+	return &amp;#39;Item: &amp;#39; + name + &amp;#39;\n&amp;#39; +
+		&amp;#39;Unit price: &amp;#39; + formatCurrency(price) + &amp;#39;\n&amp;#39; +
+		&amp;#39;Quantity: &amp;#39; + quantity + &amp;#39;\n&amp;#39; +
+		&amp;#39;TOTAL: &amp;#39; + formatCurrency(price * quantity);
+}
+ 
+alert( printPriceLong(&amp;#39;100g Toblerone bar&amp;#39;, 2.09, 3, &amp;#39;USD&amp;#39;) );
+/* =&amp;gt;
+Item: 100g Toblerone bar
+Unit price: 2.09 USD
+Quantity: 3
+TOTAL: 6.27 USD
+*/&lt;/pre&gt;
+ 
+&lt;p&gt;
+	If we try to call &lt;code&gt;formatCurrency&lt;/code&gt; from anywhere outside
+	of &lt;code&gt;printPriceLong&lt;/code&gt; we are going to cause an error because
+	&lt;code&gt;formatCurrency&lt;/code&gt; is scoped only inside its parent function.
+&lt;/p&gt;
+&lt;p&gt;
+	In this example we can also see closures in action once again. The
+	&lt;code&gt;currency&lt;/code&gt; value is referenced inside &lt;code&gt;formatCurrency&lt;/code&gt;
+	but it&amp;#39;s declared in it&amp;#39;s parent. It&amp;#39;s a short-lived closure, mind you,
+	because we are not returning that inner function. It&amp;#39;s discarded as soon
+	as the parent function exits.
+&lt;/p&gt;
+ 
+ 
+&lt;h3&gt;Who said JavaScript objects can&amp;#39;t have private members?&lt;/h3&gt;
+ 
+&lt;p&gt;
+	Developers sometimes get upset when they realize that anyone has
+	read and write access to the fields and methods of their JavaScript objects.
+	Most of us are used to work with languages that allow us to declare
+	some of our object&amp;#39;s members out of reach for the calling code. We
+	say that these members are private and we don&amp;#39;t want anyone changing
+	or even seeing them.
+&lt;/p&gt;
+ 
+&lt;p&gt;
+	Well, this is not exactly true. If you must have private members in
+	your JavaScript objects, you can. Inner functions and closures will
+	come to our rescue.
+&lt;/p&gt;
+ 
+&lt;p&gt;
+	Let&amp;#39;s build on our previous example. Let&amp;#39;s create an &lt;code&gt;OrderItem&lt;/code&gt;
+	object that will hold those values (name, price, etc.) Let&amp;#39;s assume we
+	do not want anyone changing the object&amp;#39;s price without changing the 
+	currency at the same time (to ensure some level of consistency.) We 
+	could code our object like this:
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js"&gt;function OrderItem(productName, price, quantity, currency) {
+	//regular properties
+	this.name = productName;
+	this.quantity = quantity;
+ 
+	//read accessors
+	this.getCurrency = function(){ return currency; };	
+	this.getPrice = function(){ return price; };
+	//write accessor
+	this.setPrice = function(newPrice, newCurrency){
+		if(typeof price !== &amp;#39;number&amp;#39; || price &amp;lt; 0){
+			throw { message:&amp;#39;invalid price&amp;#39; };
+		}
+		if(typeof newCurrency !== &amp;#39;string&amp;#39;){
+			throw { message:&amp;#39;invalid currency&amp;#39; };
+		}
+		price = newPrice;
+		currency = newCurrency;
+	};
+ 
+	//a private function
+	var formatCurrency = function(value) {
+		return value + &amp;#39; &amp;#39; + currency;
+	};
+	
+	//methods that need private members
+	this.getUnitPriceString = function(){
+		return formatCurrency(price);
+	};
+	this.getTotalPriceString = function(){
+		return formatCurrency(price * quantity);
+	};
+}
+ 
+OrderItem.prototype = {
+	//overriding the string representation of the object
+	toString: function(){
+		return  &amp;#39;Item: &amp;#39; + this.name + &amp;#39;\n&amp;#39; +
+			&amp;#39;Unit price: &amp;#39; + this.getUnitPriceString() + &amp;#39;\n&amp;#39; +
+			&amp;#39;Quantity: &amp;#39; + this.quantity + &amp;#39;\n&amp;#39; +
+			&amp;#39;TOTAL: &amp;#39; + this.getTotalPriceString();	
+	}
+};&lt;/pre&gt;
+ 
+&lt;p&gt;
+	That seems a bit long, but hopefully we can understand what&amp;#39;s going on here.
+	We are letting &lt;code&gt;name&lt;/code&gt; and &lt;code&gt;quantity&lt;/code&gt; be regular
+	read/write properties but we never defined properties for &lt;code&gt;price&lt;/code&gt;
+	or &lt;code&gt;currency&lt;/code&gt;. We made those two values accessible via the
+	&lt;code&gt;getPrice&lt;/code&gt; and &lt;code&gt;getCurrency&lt;/code&gt; methods, respectively.
+&lt;/p&gt;
+ 
+&lt;p&gt;
+	The trick here is that both &lt;code&gt;getPrice&lt;/code&gt; 
+	and &lt;code&gt;getCurrency&lt;/code&gt; are defined inside our constructor
+	function so they have access to the local variables &lt;code&gt;price&lt;/code&gt;
+	and &lt;code&gt;currency&lt;/code&gt;. They have access to these variables even
+	after the constructor returns (thank you closures.)
+&lt;/p&gt;
+ 
+&lt;p&gt;
+	The same can be said for the &lt;code&gt;setPrice&lt;/code&gt; method. We
+	will use this method when we need to change the object&amp;#39;s price.
+	It will force us to also provide a currency.
+&lt;/p&gt;
+ 
+&lt;p&gt;
+	I&amp;#39;ll leave the explanation of the methods &lt;code&gt;getUnitPriceString&lt;/code&gt; 
+	and &lt;code&gt;getTotalPriceString&lt;/code&gt; as an exercise for you.
+&lt;/p&gt;
+ 
+&lt;p&gt;
+	Let&amp;#39;s instantiate one of these objects and see it in action.
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js:nogutter"&gt;var item = new OrderItem(&amp;#39;100g Toblerone bar&amp;#39;, 2.09, 3, &amp;#39;USD&amp;#39;);
+//public methods:
+alert( item.getUnitPriceString() );
+// =&amp;gt; &amp;#39;2.09 USD&amp;#39;
+alert( item.getTotalPriceString() );
+// =&amp;gt; &amp;#39;6.27 USD&amp;#39;
+alert(item); //this will use the toString() method
+/* =&amp;gt;
+Item: 100g Toblerone bar
+Unit price: 2.09 USD
+Quantity: 3
+TOTAL: 6.27 USD
+*/
+ 
+//changing private fields
+item.setPrice(1.11, &amp;#39;EUR&amp;#39;);
+alert( item );
+/* =&amp;gt;
+Item: 100g Toblerone bar
+Unit price: 1.11 EUR   &amp;lt;-- it worked!
+Quantity: 3
+TOTAL: 3.33 EUR
+*/
+ 
+//proving that price is not a field
+item.price = &amp;#39;5.00&amp;#39;;
+alert( item.getUnitPriceString() );
+// =&amp;gt; &amp;#39;1.11 EUR&amp;#39; &amp;lt;-- Gotcha, smart pants!
+ 
+item.setPrice(2);
+//ERROR: message = &amp;#39;invalid currency&amp;#39;
+alert( item.formatCurrency(1.23) );
+//ERROR: item.formatCurrency is not a function&lt;/pre&gt;
+ 
+&lt;h3&gt;And what am I supposed to do with this information?&lt;/h3&gt;
+ 
+&lt;p&gt;
+	I have yet to find the need to use private members in my
+	JavaScript objects. Maybe that&amp;#39;s because I am not shipping
+	any JavaScript library with complex enough objects.
+&lt;/p&gt;
+&lt;p&gt;
+	I think it&amp;#39;s nice to know that you can create those off-limits
+	values in your object. Hopefully when the need for such thing
+	arises, we won&amp;#39;t just say &lt;i&gt;Oh, no! Can&amp;#39;t do that!&lt;/i&gt;.
+&lt;/p&gt;
+&lt;p&gt;
+	What about you? Have you found a use for private members in
+	your JavaScript code? How did you get around or implemented it?
+&lt;/p&gt;&lt;div style="clear:both;"&gt;&lt;/div&gt;&lt;img src="http://devlicio.us/aggbug.aspx?PostID=44569" width="1" height="1"&gt;</description><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/Series/default.aspx">Series</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript/default.aspx">JavaScript</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx">JavaScript-Demystified</category></item><item><title>JavaScript, time to grok closures</title><link>http://devlicio.us/blogs/sergio_pereira/archive/2009/02/23/javascript-time-to-grok-closures.aspx</link><pubDate>Mon, 23 Feb 2009 13:28:00 GMT</pubDate><guid isPermaLink="false">40756a8b-6212-4073-9d98-6c26781577de:44499</guid><dc:creator>sergiopereira</dc:creator><slash:comments>18</slash:comments><wfw:commentRss xmlns:wfw="http://wellformedweb.org/CommentAPI/">http://devlicio.us/blogs/sergio_pereira/rsscomments.aspx?PostID=44499</wfw:commentRss><comments>http://devlicio.us/blogs/sergio_pereira/archive/2009/02/23/javascript-time-to-grok-closures.aspx#comments</comments><description>&lt;div class="note"&gt;
+	This post is part of a series called &lt;a href="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx"&gt;JavaScript Demystified&lt;/a&gt;.
+&lt;/div&gt;
+ 
+&lt;p&gt;
+	When I wrote about &lt;a href="http://devlicio.us/blogs/sergio_pereira/archive/2009/02/09/javascript-5-ways-to-call-a-function.aspx"&gt;functions in JavaScript&lt;/a&gt; I mentioned that 
+	functions are more than just a block of code:
+&lt;/p&gt;
+&lt;blockquote&gt;
+	&lt;code&gt;Function&lt;/code&gt; is a standard data type in JavaScript, an object indeed; you can pass them around and copy them. 
+&lt;/blockquote&gt;
+ 
+&lt;p&gt;
+	Let&amp;#39;s take a look at this small sample of a function that creates 
+	and returns another function. The returned function accepts one
+	string argument and returns another string repeating the argument a number of times.
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js"&gt;function makeRepeater(times){
+	return function(text){
+		var message = &amp;#39;&amp;#39;;
+		for (var i=0; i &amp;lt; times; i++) {
+			message += text + &amp;#39; &amp;#39;;
+		}
+		return message;
+	};
+}&lt;/pre&gt;
+ 
+&lt;p&gt;
+	Let&amp;#39;s now write some code that uses that function.
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js"&gt;var threeTimes = makeRepeater(3);
+var fourTimes = makeRepeater(4);
+alert( threeTimes(&amp;#39;hi&amp;#39;) );
+// =&amp;gt; &amp;#39;hi hi hi &amp;#39;
+alert( fourTimes(&amp;#39;hi&amp;#39;) );
+// =&amp;gt; &amp;#39;hi hi hi hi &amp;#39;&lt;/pre&gt;
+ 
+&lt;p&gt;
+	Nothing spectacular, right? But look closely. The function returned by
+	&lt;code&gt;makeRepeater&lt;/code&gt; contains a reference to &lt;code&gt;times&lt;/code&gt;, 
+	which is a local variable of &lt;code&gt;makeRepeater&lt;/code&gt;. When we call
+	&lt;code&gt;threeTimes&lt;/code&gt; or &lt;code&gt;fourTimes&lt;/code&gt; the
+	&lt;code&gt;makeRepeater&lt;/code&gt; call has already returned and &lt;code&gt;times&lt;/code&gt;
+	should be out of scope. Or should it?
+&lt;/p&gt;
+ 
+&lt;h3&gt;Extra life for your local scope&lt;/h3&gt;
+ 
+&lt;p&gt;
+	You may try to argue and say that the &lt;code&gt;times&lt;/code&gt; inside 
+	&lt;code&gt;threeTimes&lt;/code&gt; is not a &lt;i&gt;reference&lt;/i&gt; to the
+	&lt;code&gt;times&lt;/code&gt; from &lt;code&gt;makeRepeater&lt;/code&gt;, but just
+	a &lt;i&gt;copy&lt;/i&gt; of that value. Well, sadly I&amp;#39;ll have to prove you wrong. Let&amp;#39;s
+	modify our code just a little.
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js"&gt;var times;
+function makeRepeater(){
+	return function(text){
+		var message = &amp;#39;&amp;#39;;
+		for (var i=0; i &amp;lt; times; i++) {
+			message += text + &amp;#39; &amp;#39;;
+		}
+		return message;
+	};
+}
+ 
+times = 3;
+var threeTimes = makeRepeater();
+times = 4;
+var fourTimes = makeRepeater();
+alert( threeTimes(&amp;#39;hi&amp;#39;) );
+// =&amp;gt; &amp;#39;hi hi hi hi &amp;#39;  ---&amp;gt; What?!?!
+alert( fourTimes(&amp;#39;hi&amp;#39;) );
+// =&amp;gt; &amp;#39;hi hi hi hi &amp;#39;&lt;/pre&gt;
+ 
+&lt;p&gt;
+	If it&amp;#39;s not clear yet, let me write it down for you. The returned function
+	really keeps a reference to any outside values it will need when invoked.
+	In our original example, it kept a reference to the &lt;code&gt;times&lt;/code&gt; 
+	local variable at the time it was produced.  If we had created other
+	local variables inside &lt;code&gt;makeRepeater&lt;/code&gt; they would also become
+	available inside the returned function. In other words, all the scope
+	created during the call to &lt;code&gt;makeRepeater&lt;/code&gt; will be preserved
+	for the returned function. This happens when the returned (or inner)
+	function has a reference to anything defined in the parent (or outer)
+	function, i.e. the parent local scope. When this happens, we say that a 
+	&lt;a href="http://en.wikipedia.org/wiki/Closure_(computer_science)"&gt;closure&lt;/a&gt;
+	has been created.
+&lt;/p&gt;
+ 
+&lt;h3&gt;Closures can be tricky&lt;/h3&gt;
+ 
+&lt;p&gt;
+	It&amp;#39;s important to understand the mechanics of closures to avoid
+	subtle bugs in our code. Look at this piece of code, adapted from
+	a real bug I had to fix.
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js"&gt;&amp;lt;input type=&amp;quot;button&amp;quot; value=&amp;quot;Button 1&amp;quot; id=&amp;quot;btn1&amp;quot;&amp;gt;
+&amp;lt;input type=&amp;quot;button&amp;quot; value=&amp;quot;Button 2&amp;quot; id=&amp;quot;btn2&amp;quot;&amp;gt;
+&amp;lt;input type=&amp;quot;button&amp;quot; value=&amp;quot;Button 3&amp;quot; id=&amp;quot;btn3&amp;quot;&amp;gt;
+ 
+&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;
+	function createEventHandlers(){
+		var btn;
+		for(var i=1; i &amp;lt;= 3; i++){
+			btn = document.getElementById(&amp;#39;btn&amp;#39; + i);
+			btn.onclick = function(){
+				alert(&amp;#39;Clicked button #&amp;#39; + i);
+			}
+		}
+	}
+	createEventHandlers();
+&amp;lt;/script&amp;gt;&lt;/pre&gt;
+ 
+&lt;p&gt;
+	If you put this code in a page and click the three buttons you will see
+	that all of them will show the message &amp;quot;Clicked button #4&amp;quot;. Armed with
+	our understanding of closures we can immediately understand that this
+	bug is being caused by that reference to &lt;code&gt;i&lt;/code&gt; used inside
+	the event handler. We can fix that.
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js"&gt;function createEventHandlers(){
+	var btn;
+	for(var i=1; i &amp;lt;= 3; i++){
+		btn = document.getElementById(&amp;#39;btn&amp;#39; + i);
+		btn.onclick = createOneHandler(i);
+	}
+}
+ 
+function createOneHandler(number){
+	return function() {
+		alert(&amp;#39;Clicked button #&amp;#39; + number);
+	}
+}&lt;/pre&gt;
+ 
+&lt;p&gt;
+	The above code works because we are not creating functions inside 
+	the &lt;code&gt;for&lt;/code&gt; loop, hence not producing closures on the same local scope.
+	There is a different set of closures being produced by 
+	&lt;code&gt;createOneHandler&lt;/code&gt;, but those are not pointing to the same
+	parent scope. Each of these three new closures contain a different
+	scope, created by each call to &lt;code&gt;createOneHandler&lt;/code&gt;
+&lt;/p&gt;
+ 
+&lt;h3&gt;Closing thoughts&lt;/h3&gt;
+ 
+&lt;p&gt;
+	Closures, of course, are not an exclusive feature of JavaScript. It&amp;#39;s
+	a very important trait of functional languages. Even in C#, when
+	we use lambdas, closures are created &amp;mdash; many times without us
+	noticing.
+&lt;/p&gt;
+&lt;p&gt; 
+	The key to properly using closures in our code is to pay attention
+	to locally scoped values from the outer function being used in the
+	body of the inner function. Most of the times this will work as
+	intended by the developer but, when it doesn&amp;#39;t, stop and check
+	if more than one closure is sharing the same local scope or if
+	these local values are changing between the inner function
+	creation and its invocation.
+&lt;/p&gt;
+ 
+&lt;div style="clear:both;"&gt;&lt;/div&gt;&lt;img src="http://devlicio.us/aggbug.aspx?PostID=44499" width="1" height="1"&gt;</description><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/Series/default.aspx">Series</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript/default.aspx">JavaScript</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx">JavaScript-Demystified</category></item><item><title>JavaScript, 5 ways to call a function</title><link>http://devlicio.us/blogs/sergio_pereira/archive/2009/02/09/javascript-5-ways-to-call-a-function.aspx</link><pubDate>Mon, 09 Feb 2009 06:03:00 GMT</pubDate><guid isPermaLink="false">40756a8b-6212-4073-9d98-6c26781577de:44041</guid><dc:creator>sergiopereira</dc:creator><slash:comments>25</slash:comments><wfw:commentRss xmlns:wfw="http://wellformedweb.org/CommentAPI/">http://devlicio.us/blogs/sergio_pereira/rsscomments.aspx?PostID=44041</wfw:commentRss><comments>http://devlicio.us/blogs/sergio_pereira/archive/2009/02/09/javascript-5-ways-to-call-a-function.aspx#comments</comments><description>&lt;div class="note"&gt;
+	This post is part of a series called &lt;a href="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx"&gt;JavaScript Demystified&lt;/a&gt;.
+&lt;/div&gt;
+ 
+&lt;p&gt;
+Time after time I find JavaScript code that has bugs caused by lack of proper understanding of how functions work in JavaScript (a lot of that code has been written by me, by the way.) JavaScript has functional programming characteristics, and that can get in our way until we decide to face and learn it.
+&lt;/p&gt;
+ 
+&lt;p&gt;
+For starters, let&amp;#39;s examine five ways to invoke a function. On the surface we might be tempted to think that functions work exactly like C#, but we will see that there are important differences and ignoring them will undoubtedly result in hard to track bugs.
+&lt;/p&gt;
+ 
+&lt;p&gt;
+Let&amp;#39;s first create a simple function that we will be using through the rest of this post. This function will just return an array with the current value of &lt;code&gt;this&lt;/code&gt; and the two supplied arguments.
+&lt;/p&gt;
+ 
+ 
+&lt;pre name="code" class="js:nogutter"&gt;&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;
+function makeArray(arg1, arg2){
+	return [ this, arg1, arg2 ];
+}
+&amp;lt;/script&amp;gt;&lt;/pre&gt;
+ 
+&lt;h3&gt;Most common way, unfortunately, global function calls&lt;/h3&gt;
+ 
+ 
+&lt;p&gt;
+When we are learning JavaScript we learn how to define functions using the syntax used in the example above. We learn that it&amp;#39;s also very easy to call that function &amp;mdash; all we need to do is:
+&lt;/p&gt;
+ 
+ 
+&lt;pre name="code" class="js:nogutter"&gt;makeArray(&amp;#39;one&amp;#39;, &amp;#39;two&amp;#39;);
+// =&amp;gt; [ window, &amp;#39;one&amp;#39;, &amp;#39;two&amp;#39; ]&lt;/pre&gt;
+ 
+ 
+&lt;p&gt;
+Wait a minute. What&amp;#39;s that &lt;code&gt;window&lt;/code&gt; object doing there? Why is it the value of &lt;code&gt;this&lt;/code&gt;? If you haven&amp;#39;t stopped to think about it, please stay with me here.
+&lt;/p&gt;
+ 
+&lt;p&gt;
+In JavaScript, and I&amp;#39;m not talking specifically about the browser here, there&amp;#39;s a default/global object. It&amp;#39;s as if every code that we write which  seems to be just &amp;quot;loose&amp;quot; inside your script (i.e. outside of any object declaration) is actually being written in the context of that global object. In our case, that &lt;code&gt;makeArray&lt;/code&gt; function isn&amp;#39;t just a loose &amp;quot;global&amp;quot; function, it&amp;#39;s a method of the global object. Bringing ourselves back to the browser, the global object is mapped to the &lt;code&gt;window&lt;/code&gt; object in this environment. Let&amp;#39;s prove that.
+&lt;/p&gt;
+ 
+ 
+&lt;pre name="code" class="js:nogutter"&gt;alert( typeof window.methodThatDoesntExist );
+// =&amp;gt; undefined
+alert( typeof window.makeArray);
+// =&amp;gt; function&lt;/pre&gt;
+ 
+ 
+&lt;p&gt;
+What all this means is that calling &lt;code&gt;makeArray&lt;/code&gt; like we did before is the same as calling as follows.
+&lt;/p&gt;
+ 
+ 
+&lt;pre name="code" class="js:nogutter"&gt;window.makeArray(&amp;#39;one&amp;#39;, &amp;#39;two&amp;#39;);
+// =&amp;gt; [ window, &amp;#39;one&amp;#39;, &amp;#39;two&amp;#39; ]&lt;/pre&gt;
+ 
+ 
+&lt;p&gt;
+I say it&amp;#39;s unfortunate that this is the most common way because it leads us to declare our functions globally by default. And we all know that global members are not exactly the best practice in software programming. This is especially true in JavaScript. Avoid globals in JavaScript, you won&amp;#39;t regret it.
+&lt;/p&gt;
+ 
+&lt;div class="note"&gt;
+&lt;span class="legend"&gt;&lt;b&gt;JavaScript function invocation rule #1&lt;/b&gt;&lt;/span&gt;
+In a function called directly without an explicit owner object, like &lt;code&gt;myFunction()&lt;/code&gt;, causes the value of &lt;code&gt;this&lt;/code&gt; to be the default object (&lt;code&gt;window&lt;/code&gt; in the browser).
+&lt;/div&gt;
+ 
+&lt;h3&gt;Method call&lt;/h3&gt;
+ 
+&lt;p&gt;
+Let&amp;#39;s now create a small object and use the &lt;code&gt;makeArray&lt;/code&gt; function as one of its methods. We will declare the object using the literal notation. Let&amp;#39;s also call this method.
+&lt;/p&gt;
+ 
+ 
+&lt;pre name="code" class="js:nogutter"&gt;//creating the object
+var arrayMaker = {
+	someProperty: &amp;#39;some value here&amp;#39;,
+	make: makeArray
+};
+ 
+//invoke the make() method
+arrayMaker.make(&amp;#39;one&amp;#39;, &amp;#39;two&amp;#39;);
+// =&amp;gt; [ arrayMaker, &amp;#39;one&amp;#39;, &amp;#39;two&amp;#39; ]
+// alternative syntax, using square brackets
+arrayMaker[&amp;#39;make&amp;#39;](&amp;#39;one&amp;#39;, &amp;#39;two&amp;#39;);
+// =&amp;gt; [ arrayMaker, &amp;#39;one&amp;#39;, &amp;#39;two&amp;#39; ]&lt;/pre&gt;
+ 
+ 
+&lt;p&gt;
+See the difference here? The value of &lt;code&gt;this&lt;/code&gt; became the object itself. You may be wondering why isn&amp;#39;t it still &lt;code&gt;window&lt;/code&gt; since that&amp;#39;s how the original function had been defined. Well, that&amp;#39;s just the way functions are passed around in JavaScript. &lt;code&gt;Function&lt;/code&gt; is a standard data type in JavaScript, an object indeed; you can pass them around and copy them. It&amp;#39;s as if the entire function with argument list and body was copied and assigned to make in &lt;code&gt;arrayMaker&lt;/code&gt;. It&amp;#39;s just like defining &lt;code&gt;arrayMaker&lt;/code&gt; like this:
+&lt;/p&gt;
+ 
+ 
+&lt;pre name="code" class="js:nogutter"&gt;var arrayMaker = {
+	someProperty: &amp;#39;some value here&amp;#39;,
+	make: function (arg1, arg2) {
+		return [ this, arg1, arg2 ];
+	}
+};&lt;/pre&gt;
+ 
+&lt;div class="note"&gt;
+&lt;span class="legend"&gt;&lt;b&gt;JavaScript function invocation rule #2&lt;/b&gt;&lt;/span&gt;
+In a function called using the method invocation syntax, like &lt;code&gt;obj.myFunction()&lt;/code&gt; or &lt;code&gt;obj[&amp;#39;myFunction&amp;#39;]()&lt;/code&gt;, causes the value of &lt;code&gt;this&lt;/code&gt; to be &lt;code&gt;obj&lt;/code&gt;.
+&lt;/div&gt;
+ 
+ 
+&lt;p&gt;
+This is a major source of bugs in event handling code. Look at these examples.
+&lt;/p&gt;
+ 
+ 
+&lt;pre name="code" class="js:nogutter"&gt;&amp;lt;input type=&amp;quot;button&amp;quot; value=&amp;quot;Button 1&amp;quot; id=&amp;quot;btn1&amp;quot;  /&amp;gt;
+&amp;lt;input type=&amp;quot;button&amp;quot; value=&amp;quot;Button 2&amp;quot; id=&amp;quot;btn2&amp;quot;  /&amp;gt;
+&amp;lt;input type=&amp;quot;button&amp;quot; value=&amp;quot;Button 3&amp;quot; id=&amp;quot;btn3&amp;quot;  onclick=&amp;quot;buttonClicked();&amp;quot;/&amp;gt;
+ 
+&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;
+function buttonClicked(){
+	var text = (this === window) ? &amp;#39;window&amp;#39; : this.id;
+	alert( text );
+}
+var button1 = document.getElementById(&amp;#39;btn1&amp;#39;);
+var button2 = document.getElementById(&amp;#39;btn2&amp;#39;);
+ 
+button1.onclick = buttonClicked;
+button2.onclick = function(){   buttonClicked();   };
+&amp;lt;/script&amp;gt;&lt;/pre&gt;
+ 
+ 
+&lt;p&gt;
+Clicking the first button will display &lt;i&gt;&amp;quot;btn1&amp;quot;&lt;/i&gt; because it&amp;#39;s a method invocation and &lt;code&gt;this&lt;/code&gt; will be assigned the owner object (the button input element.) Clicking the second button will display &lt;i&gt;&amp;quot;window&amp;quot;&lt;/i&gt; because &lt;code&gt;buttonClicked&lt;/code&gt; is being called directly (i.e. not like &lt;code&gt;obj.buttonClicked()&lt;/code&gt;.) This is the same thing that happens when we assign the event handler directly in the element&amp;#39;s tag, as we have done for the third button. Clicking the third button does the same of the second button.
+&lt;/p&gt;
+ 
+&lt;p&gt;
+That&amp;#39;s another advantage of using a library like jQuery. When defining event handlers in jQuery, the library will take care of overriding the value of &lt;code&gt;this&lt;/code&gt; and make sure it contains a reference to the element that was the source of the event.
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js:nogutter"&gt;//using jQuery
+$(&amp;#39;#btn1&amp;#39;).click( function() {
+	alert( this.id ); // jQuery ensures &amp;#39;this&amp;#39; will be the button
+});&lt;/pre&gt;
+ 
+&lt;p&gt;
+How does jQuery override the value of &lt;code&gt;this&lt;/code&gt;? Keep reading.
+&lt;/p&gt;
+ 
+&lt;h3&gt;Two more: &lt;code&gt;apply()&lt;/code&gt; and &lt;code&gt;call()&lt;/code&gt;&lt;/h3&gt;
+ 
+&lt;p&gt;
+The more you leverage functions in JavaScript, the more you find yourself passing functions around and needing to invoke them in different contexts. Just like jQuery does in the event handler functions, you&amp;#39;ll often need to override the value of &lt;code&gt;this&lt;/code&gt;. Remember I told you functions are objects in JavaScript? Functions have predefined methods, two of them are &lt;code&gt;apply()&lt;/code&gt; and &lt;code&gt;call()&lt;/code&gt;. We can use them to do precisely that kind of overriding.
+&lt;/p&gt;
+ 
+&lt;pre name="code" class="js:nogutter"&gt;var gasGuzzler = { year: 2008, model: &amp;#39;Dodge Bailout&amp;#39; };
+makeArray.apply( gasGuzzler, [ &amp;#39;one&amp;#39;, &amp;#39;two&amp;#39; ] );
+// =&amp;gt; [ gasGuzzler, &amp;#39;one&amp;#39; , &amp;#39;two&amp;#39; ]
+makeArray.call( gasGuzzler,  &amp;#39;one&amp;#39;, &amp;#39;two&amp;#39; );
+// =&amp;gt; [ gasGuzzler, &amp;#39;one&amp;#39; , &amp;#39;two&amp;#39; ]&lt;/pre&gt;
+ 
+ 
+&lt;p&gt;
+The two methods are similar. The first parameter will override &lt;code&gt;this&lt;/code&gt;. They differ on the subsequent arguments. &lt;code&gt;Function.apply()&lt;/code&gt; takes an array of values that will be passed as arguments to the function and &lt;code&gt;Function.call()&lt;/code&gt; takes the same arguments separately. In practice I believe you&amp;#39;ll find that &lt;code&gt;apply()&lt;/code&gt; is more convenient in most cases.
+&lt;/p&gt;
+ 
+&lt;div class="note"&gt;
+&lt;span class="legend"&gt;&lt;b&gt;JavaScript function invocation rule #3&lt;/b&gt;&lt;/span&gt;
+If we want to override the value of &lt;code&gt;this&lt;/code&gt; without copying the function to another object, we can use &lt;code&gt;myFunction.apply( obj )&lt;/code&gt; or &lt;code&gt;myFunction.call( obj )&lt;/code&gt;.
+&lt;/div&gt;
+ 
+&lt;h3&gt;Constructors&lt;/h3&gt;
+ 
+&lt;p&gt;
+I won&amp;#39;t delve into the details of defining types in JavaScript but at minimum we should be aware that there aren&amp;#39;t classes in JavaScript and that any custom type needs a constructor function. It&amp;#39;s also a good idea to define the methods of your type using the &lt;code&gt;prototype&lt;/code&gt; object, which is a property of the constructor function. Let&amp;#39;s create a small type.
+&lt;/p&gt;
+ 
+ 
+&lt;pre name="code" class="js:nogutter"&gt;//declaring the constructor
+function ArrayMaker(arg1, arg2) {
+	this.someProperty = &amp;#39;whatever&amp;#39;;
+	this.theArray = [ this, arg1, arg2 ];
+}
+// declaring instance methods
+ArrayMaker.prototype = {
+	someMethod: function () {
+		alert( &amp;#39;someMethod called&amp;#39;);
+	},
+	getArray: function () {
+		return this.theArray;
+	}
+};
+ 
+var am = new ArrayMaker( &amp;#39;one&amp;#39;, &amp;#39;two&amp;#39; );
+var other = new ArrayMaker( &amp;#39;first&amp;#39;, &amp;#39;second&amp;#39; );
+ 
+am.getArray();
+// =&amp;gt; [ am, &amp;#39;one&amp;#39; , &amp;#39;two&amp;#39; ]&lt;/pre&gt;
+ 
+ 
+&lt;p&gt;
+What&amp;#39;s very important to note here is the presence of the &lt;code&gt;new&lt;/code&gt; operator before the function call. Without that your function will just be called like a global function and those properties that we are creating would be created on the global object (&lt;code&gt;window&lt;/code&gt;.) And you don&amp;#39;t want to do that. Another issue is that, because you typically don&amp;#39;t have an explicit return value in your constructor function, you&amp;#39;ll end up assigning &lt;code&gt;undefined&lt;/code&gt; to some variable if you forget to use &lt;code&gt;new&lt;/code&gt;. For these reasons it&amp;#39;s a good convention to name your constructor functions starting with an upper case character. This should serve as a reminder to put the &lt;code&gt;new&lt;/code&gt; operator before the call.
+&lt;/p&gt;
+ 
+&lt;p&gt;
+With that taken care of, the code inside the constructor is very similar to any constructor you probably have written in other languages. The value of &lt;code&gt;this&lt;/code&gt; will be the new object that you are trying to initialize.
+&lt;/p&gt;
+ 
+&lt;div class="note"&gt;
+&lt;span class="legend"&gt;&lt;b&gt;JavaScript function invocation rule #4&lt;/b&gt;&lt;/span&gt;
+When used as a constructor, like &lt;code&gt;new MyFunction()&lt;/code&gt;, the value of &lt;code&gt;this&lt;/code&gt; will be a brand new object provided by the JavaScript runtime. If we don&amp;#39;t explictly return anything from that function, &lt;code&gt;this&lt;/code&gt; will be considered its return value.
+&lt;/div&gt;
+ 
+&lt;h3&gt;It&amp;#39;s a wrap&lt;/h3&gt;
+ 
+&lt;p&gt;
+I hope understanding the differences between the invocation styles help you keeping bugs out of your JavaScript code. Some of these bugs can be very tricky do identify and making sure you always know what the value of &lt;code&gt;this&lt;/code&gt; will be is a good start to avoiding them in the first place.
+&lt;/p&gt;
+ 
+ 
+&lt;div style="clear:both;"&gt;&lt;/div&gt;&lt;img src="http://devlicio.us/aggbug.aspx?PostID=44041" width="1" height="1"&gt;</description><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/Series/default.aspx">Series</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript/default.aspx">JavaScript</category><category domain="http://devlicio.us/blogs/sergio_pereira/archive/tags/JavaScript-Demystified/default.aspx">JavaScript-Demystified</category></item></channel></rss>

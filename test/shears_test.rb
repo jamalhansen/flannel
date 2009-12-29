@@ -39,5 +39,12 @@ class ShearsTest < Test::Unit::TestCase
       squares = @shears.cut markup
       assert_equal "foo\n\nbar",  squares[0].to_s
     end
+    
+    should "set square style to feed based on ampersand " do
+      markup = "& http://www.example.com/rss"
+
+      squares = @shears.cut markup
+      assert_equal :feed, squares[0].style
+    end
   end
 end

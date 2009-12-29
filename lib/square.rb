@@ -6,7 +6,7 @@ module Flannel
     attr_accessor :style
     
     def initialize params={}
-      @tags ={:preformatted => "pre", :list => "ul", :header_1 => "h1", :header_2 => "h2", :header_3 => "h3", :header_4 => "h4", :header_5 => "h5", :header_6 => "h6"}
+      @tags ={:preformatted => "pre", :feed => "ul", :list => "ul", :header_1 => "h1", :header_2 => "h2", :header_3 => "h3", :header_4 => "h4", :header_5 => "h5", :header_6 => "h6"}
       @stripes = []
       @style = :paragraph
     end

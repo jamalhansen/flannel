@@ -1,4 +1,5 @@
 require 'wrappable'
+require 'feed_parser'
 
 module Flannel
   class Stripe
@@ -39,8 +40,13 @@ module Flannel
     end
 
     def to_h
-      text = build_wiki_links
-      markup text
+      if feed
+	parser = Flannel::FeedParser.new
+	parser.sub_feeds @weave
+      else
+	text = build_wiki_links
+	markup text
+      end
     end
 
     def preformatted
@@ -50,13 +56,17 @@ module Flannel
     def list
       @style == :list
     end
+    
+    def feed
+      @style == :feed
+    end
 
     def markup text
       return html_escape text if preformatted
 
       tag = "li" if list
       wrap(text, tag)
-    end
+     end
 
     def html_escape text
       require 'cgi'

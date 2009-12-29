@@ -1,0 +1,29 @@
+<!-- generator="WordPress/2.9" --> 
+<rss version="0.92"> 
+<channel> 
+	<title>Blog &#124; Rubyyot &#187; rubyyot</title> 
+	<link>http://blog.rubyyot.com</link> 
+	<description>Pragmatism, productivity, programming and getting by in the world</description> 
+	<lastBuildDate>Wed, 24 Jun 2009 05:53:27 +0000</lastBuildDate> 
+	<docs>http://backend.userland.com/rss092</docs> 
+	<language>en</language> 
+	
+	<item> 
+		<title>Plans for Rubyyot.com and the Summer of Learning Challenge</title> 
+		<description><![CDATA[Plans for the future 
+In the past week I started playing with Rack and put together a little Rack application that generates content from my blog&#8217;s rss feed about the site.   As I stated in that post I really didn&#8217;t like having the &#8220;parked&#8221; page up there, and I also wanted to try out Rack, which [...]]]></description> 
+		<link>http://blog.rubyyot.com/2009/05/summer-of-learning-challenge/</link> 
+			</item> 
+	<item> 
+		<title>Using Rack to generate content from an rss feed</title> 
+		<description><![CDATA[The Hype 
+Rack is taking the Ruby and Rails worlds by storm.  It&#8217;s hard to find any recent Ruby related posts that don&#8217;t mention Rack in some way or other.  It&#8217;s obvious that Rack is here.  If you haven&#8217;t read up on it.  Jason Siefer has put together a good post full [...]]]></description> 
+		<link>http://blog.rubyyot.com/2009/05/using-rack-to-generate-content-from-an-rss-feed/</link> 
+			</item> 
+	<item> 
+		<title>Rubyyot.com is dead; Long live Rubyyot.com</title> 
+		<description><![CDATA[I have pulled the plug on Rubyyot.com, the task management site.  It was an enjoyable learning experience, but I was no longer using it and I don&#8217;t think anyone else was either.  I&#8217;ve removed it to make way for new development projects.  That is if I can ever concentrate enough on any [...]]]></description> 
+		<link>http://blog.rubyyot.com/2009/03/rubyyotcom-is-dead-long-live-rubyyotcom/</link> 
+			</item> 
+</channel> 
+</rss> 
