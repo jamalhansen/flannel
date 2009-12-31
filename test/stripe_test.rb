@@ -37,6 +37,11 @@ class StripeTest < Test::Unit::TestCase
     should "permalink topics when making wiki links" do
       assert_equal "http://www.example.com/foo/cheese-tastes-good", @stripe.wiki_link("cheese tastes good")
     end
+    
+    should "not be greedy in matching" do
+      stripe = Flannel::Stripe.stitch("a -foo> and a -bar>.")
+      assert_equal 'a <a href="foo">foo</a> and a <a href="bar">bar</a>.', stripe.build_wiki_links
+    end
   end
 
   context "no lambda is provided" do
