@@ -1,4 +1,4 @@
-require 'cutting_board'
+require 'flannel/cutting_board'
 
 module Flannel
   def self.quilt markup, params={}
