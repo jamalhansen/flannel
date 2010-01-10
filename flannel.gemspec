@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{flannel}
-  s.version = "0.1.3"
+  s.version = "0.1.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jamal Hansen"]
@@ -49,13 +49,13 @@ Gem::Specification.new do |s|
      "features/support/env.rb",
      "features/wiki_links.feature",
      "flannel.gemspec",
-     "lib/cutting_board.rb",
-     "lib/feed_parser.rb",
      "lib/flannel.rb",
-     "lib/shears.rb",
-     "lib/square.rb",
-     "lib/stripe.rb",
-     "lib/wrappable.rb",
+     "lib/flannel/cutting_board.rb",
+     "lib/flannel/feed_parser.rb",
+     "lib/flannel/shears.rb",
+     "lib/flannel/square.rb",
+     "lib/flannel/stripe.rb",
+     "lib/flannel/wrappable.rb",
      "test/cutting_board_test.rb",
      "test/feed_parser_test.rb",
      "test/flannel_test.rb",
