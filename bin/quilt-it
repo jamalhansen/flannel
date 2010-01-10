@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+require 'flannel'
+
+module Flannel
+  class QuiltIt
+    def self.run! *args
+      args.each do|a|
+	if File.exists?(a)
+	  contents = IO.read(a) 
+	  
+	  doc = Flannel::quilt contents
+	  file_n_path = "#{strip_extension(a)}.html"
+	  File.open(file_n_path, 'w') {|f| f.write(doc) }
+	else
+	  puts "Can't find #{a}."
+	end
+      end
+      
+      return 1
+    end
+
+    def self.strip_extension name
+      return name unless name[-8..-1] == '.flannel'
+      name[0..-9]
+    end
+  end
+end
+    
+exit Flannel::QuiltIt.run!(*ARGV)
