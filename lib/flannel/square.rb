@@ -1,4 +1,4 @@
-require 'wrappable'
+#require 'wrappable'
 
 module Flannel
   class Square

@@ -1,5 +1,5 @@
 require 'test_helper'
-require 'stripe'
+#require 'stripe'
 
 class StripeTest < Test::Unit::TestCase
   context "basic operations" do
@@ -23,24 +23,29 @@ class StripeTest < Test::Unit::TestCase
   context "building wiki links" do
     setup do
       wiki_link = lambda { |keyword| "http://www.example.com/foo/#{keyword}"}
-      @stripe = Flannel::Stripe.stitch "the -roof is on fire>", :wiki_link => wiki_link
+      @stripe = Flannel::Stripe.stitch "the -roof is on fire>", :wiki_link =>
+wiki_link
     end
 
     should "build wiki links based on a lambda" do
-      assert_equal "http://www.example.com/foo/cheese", @stripe.wiki_link("cheese")
+      assert_equal "http://www.example.com/foo/cheese",
+@stripe.wiki_link("cheese")
     end
 
     should "find and replace wiki link markup" do
-      assert_equal 'the <a href="http://www.example.com/foo/roof-is-on-fire">roof is on fire</a>', @stripe.to_h
+      assert_equal 'the <a href="http://www.example.com/foo/roof-is-on-fire">roof is on fire</a>',
+@stripe.to_h
     end
     
     should "permalink topics when making wiki links" do
-      assert_equal "http://www.example.com/foo/cheese-tastes-good", @stripe.wiki_link("cheese tastes good")
+      assert_equal "http://www.example.com/foo/cheese-tastes-good",
+@stripe.wiki_link("cheese tastes good")
     end
     
     should "not be greedy in matching" do
       stripe = Flannel::Stripe.stitch("a -foo> and a -bar>.")
-      assert_equal 'a <a href="foo">foo</a> and a <a href="bar">bar</a>.', stripe.build_wiki_links
+      assert_equal 'a <a href="foo">foo</a> and a <a href="bar">bar</a>.',
+stripe.build_wiki_links
     end
   end
 
@@ -69,12 +74,14 @@ class StripeTest < Test::Unit::TestCase
       assert_equal 'red, - green >, refactor', stripe.to_h
     end
 
-    should "not replace surrounded by - and > with a wiki link if spaced on right" do
+    should "not replace surrounded by - and > with a wiki link if spaced on
+right" do
       stripe = Flannel::Stripe.stitch("red, -green >, refactor")
       assert_equal 'red, -green >, refactor', stripe.to_h
     end
 
-    should "not replace surrounded by - and > with a wiki link if spaced on left" do
+    should "not replace surrounded by - and > with a wiki link if spaced on
+left" do
       stripe = Flannel::Stripe.stitch("red, - green>, refactor")
       assert_equal 'red, - green>, refactor', stripe.to_h
     end

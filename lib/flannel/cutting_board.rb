@@ -1,4 +1,4 @@
-require 'shears'
+#require 'shears'
 
 
 module Flannel

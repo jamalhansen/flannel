@@ -1,5 +1,5 @@
-require 'square'
-require 'stripe'
+#require 'square'
+#require 'stripe'
 
 module Flannel
   class Shears

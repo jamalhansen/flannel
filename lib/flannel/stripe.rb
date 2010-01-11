@@ -1,5 +1,5 @@
-require 'wrappable'
-require 'feed_parser'
+#require 'wrappable'
+#require 'feed_parser'
 
 module Flannel
   class Stripe
