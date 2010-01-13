@@ -44,18 +44,21 @@ wiki_link
     
     should "not be greedy in matching" do
       stripe = Flannel::Stripe.stitch("a -foo> and a -bar>.")
-      assert_equal 'a <a href="foo">foo</a> and a <a href="bar">bar</a>.',
-stripe.build_wiki_links
+      assert_equal 'a <a href="foo">foo</a> and a <a href="bar">bar</a>.', stripe.build_wiki_links
     end
   end
   
   context "subdirectories" do
     setup do
-       @stripe = Flannel::Stripe.stitch "the -roof is on fire>"
+       @stripe = Flannel::Stripe.stitch "I think it -cheese/tastes good>."
     end
     
     should "handle subdirectories" do
       assert_equal "cheese/tastes-good", @stripe.wiki_link("-cheese/tastes good>")
+    end
+    
+    should "not display directory info" do
+      assert_equal 'I think it <a href="cheese/tastes-good">tastes good</a>.', @stripe.build_wiki_links
     end
   end
 

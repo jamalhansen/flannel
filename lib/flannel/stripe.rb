@@ -32,7 +32,11 @@ module Flannel
 
     def build_wiki_links
       return @weave if preformatted
-      @weave.gsub(/-\w(.*?)\w>/) { |match| %{<a href="#{wiki_link match}">#{match[1..-2]}</a>}}
+      @weave.gsub(/-\w(.*?)\w>/) { |match| %{<a href="#{wiki_link match}">#{format_link_display(match)}</a>}}
+    end
+    
+    def format_link_display text
+      text[1..-2].split("/").last
     end
 
     def to_h
