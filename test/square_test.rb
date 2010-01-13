@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'stripe'
 
 class SquareTest < Test::Unit::TestCase
   context "basic behavior" do

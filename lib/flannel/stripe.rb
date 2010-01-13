@@ -1,5 +1,3 @@
-#require 'wrappable'
-#require 'feed_parser'
 
 module Flannel
   class Stripe
@@ -25,9 +23,7 @@ module Flannel
     end
 
     def permalink topic
-      require 'iconv'
-      # thanks to ismasan http://snippets.dzone.com/posts/show/4457
-      (Iconv.new('US-ASCII//TRANSLIT', 'utf-8').iconv topic).gsub(/[^\w\s\-]/,'').gsub(/[^\w]|[\_]/,' ').split.join('-').downcase
+      topic.gsub(%r{[^/\w\s\-]},'').gsub(%r{[^\w/]|[\_]},' ').split.join('-').downcase
     end
 
     def empty?
