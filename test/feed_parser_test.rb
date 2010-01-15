@@ -2,6 +2,20 @@ require 'test_helper'
 require 'mocha'
 
 class FeedTest < Test::Unit::TestCase
+  context "wiring" do
+    setup do
+      @rubyyot = File.read(File.join(File.dirname(__FILE__), "..", "features", "fixtures", "rubyyot.rss"))
+      @expected_rubyyot = "<ul><li>\n    <a href='http://blog.rubyyot"
+    end
+    
+    should "be set up for feeds" do
+      feed = "http://blog.rubyyot.com/tag/rubyyot/feed/rss"
+      body = Flannel.quilt "& #{feed}"
+
+      assert_equal(@expected_rubyyot, body[0..40])
+    end
+  end
+  
   context "bootstrapping test" do
     setup do
       @devlicious = File.read(File.join(File.dirname(__FILE__), "..", "features", "fixtures", "devlicious.rss"))

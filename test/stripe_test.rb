@@ -23,8 +23,7 @@ class StripeTest < Test::Unit::TestCase
   context "building wiki links" do
     setup do
       wiki_link = lambda { |keyword| "http://www.example.com/foo/#{keyword}"}
-      @stripe = Flannel::Stripe.stitch "the -roof is on fire>", :wiki_link =>
-wiki_link
+      @stripe = Flannel::Stripe.stitch "the -roof is on fire>", :wiki_link => wiki_link
     end
 
     should "build wiki links based on a lambda" do
