@@ -22,6 +22,7 @@ module Flannel
       doc = @cache.retrieve(url) if @cache
       doc = open(url) unless doc
       @cache.save url, doc if @cache
+      doc
     end
     
     def format_item(link, title)
