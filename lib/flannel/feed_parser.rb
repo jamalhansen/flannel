@@ -31,7 +31,7 @@ module Flannel
 
     def get_news url
       item_string = ""
-      begin
+      #begin
 	doc = Hpricot.XML(get_document(url))
 
 	(doc/"item").each do |item|
@@ -41,9 +41,9 @@ module Flannel
 	end
 	
 	item_string
-      rescue
-        "Error retrieving data."
-      end
+      #rescue
+      #  "Error retrieving data."
+      #end
     end
   end
 end
