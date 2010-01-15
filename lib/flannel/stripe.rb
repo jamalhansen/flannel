@@ -39,6 +39,7 @@ module Flannel
     end
 
     def to_h
+    
       if feed
 	parser = Flannel::FeedParser.new @params
 	parser.sub_feeds @weave

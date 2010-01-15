@@ -15,7 +15,7 @@ module Flannel
     def << text
       text = text.strip unless @style == :preformatted
       @params[:style] = @style
-      @stripes << Flannel::Stripe.stitch(text, @params)
+      @stripes << Flannel::Stripe.stitch(text, @params.dup)
     end
 
     def to_s
