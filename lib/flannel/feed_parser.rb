@@ -3,6 +3,10 @@ require 'open-uri'
 
 module Flannel
   class FeedParser
+    def initialize params={}
+      @cache = params[:cache] if params.has_key?(:cache)
+    end
+    
     def sub_feeds(url)
       url = format_url(url)
       get_news(url)
@@ -15,7 +19,9 @@ module Flannel
     end
     
     def get_document url
-      open(url)
+      doc = @cache.retrieve(url) if @cache
+      doc = open(url) unless doc
+      @cache.save url, doc if @cache
     end
     
     def format_item(link, title)
@@ -24,7 +30,7 @@ module Flannel
 
     def get_news url
       item_string = ""
-      #begin
+      begin
 	doc = Hpricot.XML(get_document(url))
 
 	(doc/"item").each do |item|
@@ -34,9 +40,9 @@ module Flannel
 	end
 	
 	item_string
-      #rescue
-      #  "Error retrieving data."
-      #end
+      rescue
+        "Error retrieving data."
+      end
     end
   end
 end

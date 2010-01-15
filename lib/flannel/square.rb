@@ -9,11 +9,14 @@ module Flannel
       @tags ={:preformatted => "pre", :feed => "ul", :list => "ul", :header_1 => "h1", :header_2 => "h2", :header_3 => "h3", :header_4 => "h4", :header_5 => "h5", :header_6 => "h6"}
       @stripes = []
       @style = :paragraph
+      @params = params
     end
 
     def << text
       text = text.strip unless @style == :preformatted
-      @stripes << Flannel::Stripe.stitch(text, :style=>@style)
+      params = @params
+      params[:style] = @style
+      @stripes << Flannel::Stripe.stitch(text, params)
     end
 
     def to_s

@@ -1,14 +1,12 @@
-#require 'shears'
-
 
 module Flannel
   class CuttingBoard
     def initialize params={}
-      @wiki_link= params[:wiki_link]
+      @params = params
     end
 
     def cut markup
-      shears = Flannel::Shears.new
+      shears = Flannel::Shears.new @params
       squares = shears.cut markup
       squares.map { |square| square.to_h }.join("\n\n")
     end

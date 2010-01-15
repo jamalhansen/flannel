@@ -10,13 +10,12 @@ module Flannel
 
     def initialize weave="", params={}
       @weave = weave
-      @wiki_link = params[:wiki_link]
-      @style = params[:style]
+      @params = params
     end
     
     def wiki_link topic
-      if @wiki_link
-        @wiki_link.call(permalink topic)
+      if @params[:wiki_link]
+        @params[:wiki_link].call(permalink topic)
       else
         permalink topic[1..-2]
       end
@@ -41,7 +40,7 @@ module Flannel
 
     def to_h
       if feed
-	parser = Flannel::FeedParser.new
+	parser = Flannel::FeedParser.new @params
 	parser.sub_feeds @weave
       else
 	text = build_wiki_links
@@ -50,15 +49,15 @@ module Flannel
     end
 
     def preformatted
-      @style == :preformatted
+      @params[:style] == :preformatted
     end
 
     def list
-      @style == :list
+      @params[:style] == :list
     end
     
     def feed
-      @style == :feed
+      @params[:style] == :feed
     end
 
     def markup text

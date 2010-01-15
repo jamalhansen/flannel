@@ -3,6 +3,10 @@
 
 module Flannel
   class Shears
+    def initialize params={}
+      @params = params
+    end
+    
     def cut markup
       @squares = []
       @square = Flannel::Square.new
@@ -23,7 +27,7 @@ module Flannel
 
     def shift_square
       @squares << @square unless @square.blank?
-      @square = Flannel::Square.new
+      @square = Flannel::Square.new @params
     end
 
     def need_new_square? line

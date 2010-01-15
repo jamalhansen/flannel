@@ -4,6 +4,7 @@ require 'flannel/square'
 require 'flannel/shears'
 require 'flannel/stripe'
 require 'flannel/feed_parser'
+require 'flannel/file_cache'
 
 module Flannel
   def self.quilt markup, params={}
