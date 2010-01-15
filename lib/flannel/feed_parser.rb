@@ -19,9 +19,7 @@ module Flannel
     end
     
     def get_document url
-      doc = @cache.retrieve(url) if @cache
-      doc = open(url) unless doc
-      @cache.save url, doc if @cache
+      doc = open(url)
       doc
     end
     
@@ -30,14 +28,20 @@ module Flannel
     end
 
     def get_news url
-      item_string = ""
+      item_string = nil
+      item_string = @cache.retrieve(url) if @cache
+      
+      unless item_string 
+	item_string = ""
+	doc = Hpricot.XML(get_document(url))
 
-      doc = Hpricot.XML(get_document(url))
-
-      (doc/"item").each do |item|
-	link = (item/"link").inner_html
-	title = (item/"title").inner_html
-	item_string << format_item(link, title)
+	(doc/"item").each do |item|
+	  link = (item/"link").inner_html
+	  title = (item/"title").inner_html
+	  item_string << format_item(link, title)
+	end
+	
+	@cache.save url, item_string if @cache
       end
       
       item_string
