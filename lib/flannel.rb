@@ -6,6 +6,9 @@ require 'flannel/stripe'
 require 'flannel/feed_parser'
 require 'flannel/file_cache'
 
+require 'flannel/block_cutter'
+require 'flannel/text_block'
+
 module Flannel
   def self.quilt markup, params={}
     return nil unless markup
