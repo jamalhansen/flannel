@@ -8,11 +8,17 @@ require 'flannel/file_cache'
 
 require 'flannel/block_cutter'
 require 'flannel/text_block'
+require 'flannel/html_formatter'
 
 module Flannel
   def self.quilt markup, params={}
+    @@cache_params = params
     return nil unless markup
-    shears = Flannel::CuttingBoard.new params
+    shears = Flannel::CuttingBoard.new
     shears.cut markup
+  end
+  
+  def self.cache_params
+    @@cache_params
   end
 end

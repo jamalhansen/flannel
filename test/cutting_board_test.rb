@@ -11,11 +11,6 @@ class CuttingBoardTest < Test::Unit::TestCase
       assert_equal "<pre>foo\n\n   bar</pre>", @board.cut(markup)
     end
 
-    should "preformat text when both start and end line have the markers" do
-      markup = "_foo\n\n_   bar"
-      assert_equal "<pre>foo\n\n   bar</pre>", @board.cut(markup)
-    end
-
     should "not replace in preformatted text" do
       markup = "_4 - 2 > 2 - 2\n_"
       assert_equal '<pre>4 - 2 &gt; 2 - 2</pre>', @board.cut(markup)
