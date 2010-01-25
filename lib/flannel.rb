@@ -8,7 +8,7 @@ require 'flannel/html_formatter'
 
 module Flannel
   def self.quilt markup, params={}
-    @@cache_params = params
+    @@cache = params[:cache]
     return nil unless markup
     
     cutter = Flannel::BlockCutter.new
@@ -16,7 +16,7 @@ module Flannel
     text_blocks.map { |text| text.to_h }.join("\n\n")
   end
   
-  def self.cache_params
-    @@cache_params
+  def self.cache
+    @@cache
   end
 end

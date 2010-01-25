@@ -98,7 +98,7 @@ module Flannel
     end
     
     def parse_feed text
-      parser = Flannel::FeedParser.new  Flannel.cache_params
+      parser = Flannel::FeedParser.new  Flannel.cache
       parser.sub_feeds text
     end
   end
