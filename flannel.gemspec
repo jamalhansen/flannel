@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{flannel}
-  s.version = "0.2.2"
+  s.version = "0.2.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jamal Hansen"]
-  s.date = %q{2010-01-14}
+  s.date = %q{2010-01-25}
   s.email = %q{jamal.hansen@gmail.com}
   s.executables = ["quilt-it~", "quilt-it"]
   s.extra_rdoc_files = [
@@ -50,22 +50,22 @@ Gem::Specification.new do |s|
      "features/wiki_links.feature",
      "flannel.gemspec",
      "lib/flannel.rb",
+     "lib/flannel/block_cutter.rb",
      "lib/flannel/cache_location_does_not_exist_error.rb",
      "lib/flannel/cutting_board.rb",
      "lib/flannel/feed_parser.rb",
      "lib/flannel/file_cache.rb",
-     "lib/flannel/shears.rb",
-     "lib/flannel/square.rb",
-     "lib/flannel/stripe.rb",
+     "lib/flannel/html_formatter.rb",
+     "lib/flannel/text_block.rb",
      "lib/flannel/wrappable.rb",
+     "test/block_cutter_test.rb",
      "test/cutting_board_test.rb",
      "test/feed_parser_test.rb",
      "test/file_cache_test.rb",
      "test/flannel_test.rb",
-     "test/shears_test.rb",
-     "test/square_test.rb",
-     "test/stripe_test.rb",
-     "test/test_helper.rb"
+     "test/html_formatter_test.rb",
+     "test/test_helper.rb",
+     "test/text_block_test.rb"
   ]
   s.homepage = %q{http://github.com/rubyyot/flannel}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -74,14 +74,14 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{A soft comfortable worn in markup language for Ruby}
   s.test_files = [
-    "test/test_helper.rb",
+    "test/html_formatter_test.rb",
+     "test/block_cutter_test.rb",
+     "test/test_helper.rb",
      "test/file_cache_test.rb",
-     "test/stripe_test.rb",
      "test/cutting_board_test.rb",
+     "test/text_block_test.rb",
      "test/feed_parser_test.rb",
-     "test/flannel_test.rb",
-     "test/square_test.rb",
-     "test/shears_test.rb"
+     "test/flannel_test.rb"
   ]
 
   if s.respond_to? :specification_version then
