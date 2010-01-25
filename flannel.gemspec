@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{flannel}
-  s.version = "0.2.3"
+  s.version = "0.2.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jamal Hansen"]
@@ -52,14 +52,12 @@ Gem::Specification.new do |s|
      "lib/flannel.rb",
      "lib/flannel/block_cutter.rb",
      "lib/flannel/cache_location_does_not_exist_error.rb",
-     "lib/flannel/cutting_board.rb",
      "lib/flannel/feed_parser.rb",
      "lib/flannel/file_cache.rb",
      "lib/flannel/html_formatter.rb",
      "lib/flannel/text_block.rb",
      "lib/flannel/wrappable.rb",
      "test/block_cutter_test.rb",
-     "test/cutting_board_test.rb",
      "test/feed_parser_test.rb",
      "test/file_cache_test.rb",
      "test/flannel_test.rb",
@@ -78,7 +76,6 @@ Gem::Specification.new do |s|
      "test/block_cutter_test.rb",
      "test/test_helper.rb",
      "test/file_cache_test.rb",
-     "test/cutting_board_test.rb",
      "test/text_block_test.rb",
      "test/feed_parser_test.rb",
      "test/flannel_test.rb"
