@@ -10,13 +10,6 @@ class HtmlFormatterTest < Test::Unit::TestCase
     should "return html fragment with format" do
       assert_equal "<p>foo</p>", @formatter.do('foo', :paragraph)
     end
-
-    context "building wiki links" do
-      should "not be greedy in matching" do
-	result = @formatter.do "a -foo> and a -bar>.", :paragraph
-	assert_equal '<p>a <a href="foo">foo</a> and a <a href="bar">bar</a>.</p>', result
-      end
-    end
     
     context "subdirectories" do
       should "handle subdirectories and not display directory info" do
@@ -74,6 +67,11 @@ class HtmlFormatterTest < Test::Unit::TestCase
 
       should "replace odd characters with dashes" do
 	assert_equal "get-the-box", @formatter.permalink("get the @#)(* box")
+      end
+      
+      should "not be greedy in matching" do
+	result = @formatter.do "a -foo> and a -bar>.", :paragraph
+	assert_equal '<p>a <a href="foo">foo</a> and a <a href="bar">bar</a>.</p>', result
       end
     end
   end

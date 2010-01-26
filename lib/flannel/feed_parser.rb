@@ -3,8 +3,8 @@ require 'open-uri'
 
 module Flannel
   class FeedParser
-    def initialize params={}
-      @cache = params[:cache] if params
+    def initialize cache
+      @cache = cache
     end
     
     def sub_feeds(url)
