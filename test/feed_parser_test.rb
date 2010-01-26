@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'mocha'
 
-class FeedTest < Test::Unit::TestCase
+class FeedParserTest < Test::Unit::TestCase
   context "wiring" do
     setup do
       @rubyyot = File.read(File.join(File.dirname(__FILE__), "..", "features", "fixtures", "rubyyot.rss"))

@@ -32,6 +32,13 @@ module Flannel
 	
 	@style = "header_#{weight}".to_sym
 	@text =  text[weight..-1]
+      when ':'[0]		#generic
+	match = text.match /^(:[a-z_]+)/
+	
+	@style = match.captures[0][1..-1].to_sym
+	
+	style_length = match.captures[0].length
+	@text = text[style_length..-1].strip
       else			#other
 	@style = :paragraph
 	@text =  text

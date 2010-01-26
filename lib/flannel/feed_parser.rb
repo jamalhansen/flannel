@@ -3,7 +3,7 @@ require 'open-uri'
 
 module Flannel
   class FeedParser
-    def initialize cache
+    def initialize cache=nil
       @cache = cache
     end
     

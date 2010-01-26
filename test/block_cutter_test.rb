@@ -40,7 +40,14 @@ class BlockCutterTest < Test::Unit::TestCase
       assert_equal "foo\n\nbar",  squares[0].to_s
     end
     
-    should "set square style to feed based on ampersand " do
+    should "set square style to feed based on full tag " do
+      markup = ":feed http://www.example.com/rss"
+
+      squares = @block_cutter.cut markup
+      assert_equal :feed, squares[0].style
+    end
+    
+    should "set square style to feed based on ampersand abbrev" do
       markup = "& http://www.example.com/rss"
 
       squares = @block_cutter.cut markup

@@ -3,7 +3,17 @@ module Flannel
     include Wrappable
     
     def initialize
-      @tags ={:preformatted => "pre", :feed => "ul", :list => "ul", :header_1 => "h1", :header_2 => "h2", :header_3 => "h3", :header_4 => "h4", :header_5 => "h5", :header_6 => "h6", :paragraph => "p"}
+      @tags ={:preformatted => "pre", 
+              :feed => "ul", 
+              :list => "ul", 
+              :header_1 => "h1", 
+              :header_2 => "h2", 
+              :header_3 => "h3", 
+              :header_4 => "h4", 
+              :header_5 => "h5", 
+              :header_6 => "h6", 
+              :paragraph => "p",
+              :blockquote => "blockquote"}
     end
     
     def do text, style

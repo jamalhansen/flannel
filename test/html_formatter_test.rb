@@ -17,6 +17,13 @@ class HtmlFormatterTest < Test::Unit::TestCase
 	assert_equal '<p>I think it <a href="cheese/tastes-good">tastes good</a>.</p>', result
       end
     end
+      
+    context "blockquotes" do
+      should "wrap a blockquoted block in blockquotes" do
+	result = @formatter.do("Ruby is #1", :blockquote)
+	assert_equal '<blockquote>Ruby is #1</blockquote>', result
+      end
+    end
 
     context "links" do
       should "output the link" do
