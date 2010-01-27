@@ -6,6 +6,10 @@ require 'flannel/block_cutter'
 require 'flannel/text_block'
 require 'flannel/html_formatter'
 
+require 'flannel/blade'
+require 'flannel/header'
+require 'flannel/paragraph'
+
 module Flannel
   def self.quilt markup, params={}
     @@cache = params[:cache]

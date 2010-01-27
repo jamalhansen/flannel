@@ -9,37 +9,37 @@ Second Topic#foo.my-class
 Implied Id might be good
 
 
-+p id-for-first-topic
+^ p id-for-first-topic
 This is a really cool paragraph about really cool stuff.
 
-+p i-dunno#non-linear
+^ p i-dunno#non-linear
 This is a new non-linear way of making a page.
 
-+quote non-linear
+^ quote non-linear
 Keep it simple stupid
 
-+p its-interesting
+^ p its-interesting
 It's like building up a tree from a frame of headers.
 
-+p foo
+^ p foo
 This topic has an id of foo and a class of my-class
 
-+p foo#should-be-a-div
+^ p foo#should-be-a-div
 should the class apply to a div surrounding the whole section, or just the header?
 
-+pre foo
+^ pre foo
 I think it should be the header only, can add div if necessary. Like this:
 
 <h2 id="foo">Second Topic</h2>
   <p>This topic has an id of foo and a class of my-class</p>
   <p id="should-be-a-div">should the class apply to a div surrounding the whole section, or just the header?</p>
-/pre
 
-+html-like
+
+^html-like
 This structure mimics HTML sctucture. 
 
-+locking-in-to-much
+^locking-in-to-much
 Is this joining the syntax of flannel and html too closely?  Is that a bad thing?
 
-+sub-topic
+^ sub-topic
 MMMMM..... nah
