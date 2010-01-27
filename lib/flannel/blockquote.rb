@@ -1,7 +1,7 @@
 module Flannel
-  class Paragraph
+  class Blockquote
     include Flannel::Node
-
+    
     def initialize text
       parse text
     end

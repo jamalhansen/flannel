@@ -1,5 +1,5 @@
 module Flannel
-  class Paragraph
+  class Preformatted
     include Flannel::Node
 
     def initialize text
