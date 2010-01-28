@@ -28,7 +28,7 @@ module Flannel
 	headers.each do |header_text|
 	  header = Flannel::Header.new(header_text)
 	  index header
-	  @headers << header
+	  add_header header
 	end
       end
       
@@ -53,6 +53,23 @@ module Flannel
 	return Flannel::Paragraph.new(text) unless known_types.include? type
 	
 	klass[known_types.index(type)].new(content)
+      end
+      
+      def add_header header
+	index = find_parent_index @headers.map { |h| h.level }, header.level
+	@headers[index].add_node header	if index
+	@headers << header
+      end
+      
+      def find_parent_index index, level
+	return nil if index.length == 0
+	
+	cur_level = index.pop
+	if level > cur_level
+	  index.length  # the parent is cur_level
+	else
+	  find_parent_index index, level  # the parent is above cur_level
+	end	
       end
   end
 end

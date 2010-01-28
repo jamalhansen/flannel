@@ -60,4 +60,30 @@ class DocumentTest < Test::Unit::TestCase
       assert_equal Flannel::Preformatted, doc.page_index[:foo].nodes[0].class
     end
   end
+  
+  context "header parsing" do
+    setup do
+      headers = "Header 1\nHeader 2\n  Header 2a\n\tHeader 2b\nHeader 3"
+      @doc = Flannel::Document.new [headers]
+    end
+    
+    should "generate 5 headers" do
+      assert_equal 5, @doc.headers.length
+    end
+    
+    should "generate header 1 with no nodes" do
+      assert_equal "Header 1", @doc.headers[0].text
+      assert_equal 0, @doc.headers[0].nodes.length
+    end
+
+    should "generate header 2 with 2 nodes" do
+      assert_equal "Header 2", @doc.headers[1].text
+      assert_equal 2, @doc.headers[1].nodes.length
+    end
+    
+    should "generate header 3 with no nodes" do
+      assert_equal "Header 3", @doc.headers[4].text
+      assert_equal 0, @doc.headers[4].nodes.length
+    end
+  end
 end

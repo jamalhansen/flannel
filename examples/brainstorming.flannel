@@ -1,6 +1,6 @@
-First Topic#id-for-first-topic
-  Sub topic#my-sub-topic
-Second Topic#foo.my-class
+First Topic#id_for_first_topic
+  Sub topic#my_sub_topic
+Second Topic#foo.my_class
   Will this work?
   I dunno
     It's interesting
@@ -9,37 +9,37 @@ Second Topic#foo.my-class
 Implied Id might be good
 
 
-^ p id-for-first-topic
+^ p id_for_first_topic
 This is a really cool paragraph about really cool stuff.
 
-^ p i-dunno#non-linear
-This is a new non-linear way of making a page.
+^ p i_dunno#non_linear
+This is a new non_linear way of making a page.
 
-^ quote non-linear
+^ quote non_linear
 Keep it simple stupid
 
-^ p its-interesting
+^ p its_interesting
 It's like building up a tree from a frame of headers.
 
 ^ p foo
-This topic has an id of foo and a class of my-class
+This topic has an id of foo and a class of my_class
 
-^ p foo#should-be-a-div
+^ p foo#should_be_a_div
 should the class apply to a div surrounding the whole section, or just the header?
 
 ^ pre foo
 I think it should be the header only, can add div if necessary. Like this:
 
 <h2 id="foo">Second Topic</h2>
-  <p>This topic has an id of foo and a class of my-class</p>
-  <p id="should-be-a-div">should the class apply to a div surrounding the whole section, or just the header?</p>
+  <p>This topic has an id of foo and a class of my_class</p>
+  <p id="should_be_a_div">should the class apply to a div surrounding the whole section, or just the header?</p>
 
 
-^html-like
+^html_like
 This structure mimics HTML sctucture. 
 
-^locking-in-to-much
+^locking_in_to_much
 Is this joining the syntax of flannel and html too closely?  Is that a bad thing?
 
-^ sub-topic
+^ sub_topic
 MMMMM..... nah
