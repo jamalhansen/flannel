@@ -4,7 +4,7 @@ require 'mocha'
 class FeedParserTest < Test::Unit::TestCase
   context "wiring" do
     setup do
-      @rubyyot = File.read(File.join(File.dirname(__FILE__), "..", "features", "fixtures", "rubyyot.rss"))
+      @rubyyot = IO.read(File.join(File.dirname(__FILE__), "..", "features", "fixtures", "rubyyot.rss"))
       @expected_rubyyot = "<ul><li>\n    <a href='http://blog.rubyyot"
     end
     
@@ -18,7 +18,7 @@ class FeedParserTest < Test::Unit::TestCase
   
   context "bootstrapping test" do
     setup do
-      @devlicious = File.read(File.join(File.dirname(__FILE__), "..", "features", "fixtures", "devlicious.rss"))
+      @devlicious = IO.read(File.join(File.dirname(__FILE__), "..", "features", "fixtures", "devlicious.rss"))
       @rubyyot = File.read(File.join(File.dirname(__FILE__), "..", "features", "fixtures", "rubyyot.rss"))
     end
     

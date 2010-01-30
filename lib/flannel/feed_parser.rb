@@ -1,4 +1,3 @@
-require 'hpricot'
 require 'open-uri'
 
 module Flannel
@@ -19,8 +18,7 @@ module Flannel
     end
     
     def get_document url
-      doc = open(url)
-      doc
+      URI.parse(url).read
     end
     
     def format_item(link, title)
@@ -33,11 +31,12 @@ module Flannel
       
       unless item_string 
 	item_string = ""
-	doc = Hpricot.XML(get_document(url))
+	doc = get_document(url)
+	items = get_items(doc)
 
-	(doc/"item").each do |item|
-	  link = (item/"link").inner_html
-	  title = (item/"title").inner_html
+	items.each do |item|
+	  link = inner_html(item, "link")
+	  title = inner_html(item, "title")
 	  item_string << format_item(link, title)
 	end
 	
@@ -45,6 +44,23 @@ module Flannel
       end
       
       item_string
+    end
+    
+    def get_items text
+      items = text[/<item>.*<\/item>/mi]
+      
+      return [] unless items
+      
+      items.split(/<\/?item>/).reject { |item| /\A\s*\z/ =~ item }
+    end
+     
+    def inner_html text, tag
+      regex = Regexp.compile "<#{tag}>(.*)<\/#{tag}>?"
+
+      matches = regex.match text
+      return "" unless matches
+      
+      matches.captures[0]
     end
   end
 end

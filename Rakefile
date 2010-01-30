@@ -11,8 +11,7 @@ begin
     gem.homepage = "http://github.com/rubyyot/flannel"
     gem.authors = ["Jamal Hansen"]
     gem.rubyforge_project = "flannel"
-    gem.add_dependency 'hpricot'
-    gem.add_development_dependency ['technicalpickles-shoulda', 'mocha']
+    gem.add_development_dependency ['shoulda', 'mocha']
 
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
