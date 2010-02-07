@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'flannel/stripe'
 
 class HtmlFormatterTest < Test::Unit::TestCase
   context "basic operations" do
