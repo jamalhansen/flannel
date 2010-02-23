@@ -1,0 +1,152 @@
+grammar Block
+  rule document
+     block* {
+      def content
+        elements.map{ |element| element.content}
+      end
+    }
+  end
+
+  rule block
+     block_header block_text? {
+      def content
+        elements.map{ |element| element.respond_to?(:content) ? element.content : nil}.compact
+      end
+    }
+  end
+
+  rule block_header
+     block_start block_type block_id parent_id? attribute_list? [\s]*  {
+      def content
+        elements.map{ |element| element.respond_to?(:content) ? element.content : nil}.compact
+      end
+    }
+  end
+
+  rule block_start
+    ":" {
+      def content
+        nil
+      end
+    }
+  end
+
+  rule block_text
+    (!(block_header) .)+ {
+      def content
+        text_value.strip
+      end
+    }
+  end
+ 
+  rule block_type
+    ( paragraph / feed / preformatted / list / header ) {
+      def content
+        [:block_type, text_value.to_sym ]
+      end
+    }
+  end
+ 
+  rule paragraph
+    "paragraph" { def content; text_value; end }
+  end
+
+  rule header
+    ( header_one / header_two / header_three / header_four / header_five / header_six ) { def content; text_value; end }
+  end
+
+  rule header_one
+    "header_one" { def content; text_value; end }
+  end
+
+  rule header_two
+    "header_two" { def content; text_value; end }
+  end
+
+  rule header_three
+    "header_three" { def content; text_value; end }
+  end
+
+  rule header_four
+    "header_four" { def content; text_value; end }
+  end
+
+  rule header_five
+    "header_five" { def content; text_value; end }
+  end
+
+  rule header_six
+    "header_six" { def content; text_value; end }
+  end
+
+
+
+  rule feed
+    "feed" { def content; text_value; end }
+  end
+
+  rule preformatted
+    "preformatted" { def content; text_value; end }
+  end
+
+  rule list
+    "list" { def content; text_value; end }
+  end
+
+  rule block_id
+    " "+ [a-z\-_]+ {
+      def content
+        [:block_id, text_value.strip]
+      end
+    }
+  end
+
+  rule parent_id
+    block_id {
+      def content
+        [:parent_id, text_value.strip]
+      end
+    }
+  end
+
+  rule name
+    [A-Za-z0-9]+ {
+      def content
+        text_value
+      end
+    }
+  end
+
+  rule attribute_list
+    attribute* {
+      def content
+        attributes = elements.map{ |element| element.content }
+        attributes.unshift :attribute_list
+      end
+    }
+  end
+ 
+  rule attribute
+    [\s]+ name "=" attribute_value {
+      def content
+        [elements[1].content.to_sym, elements[3].content]
+      end
+    }
+  end
+ 
+  rule attribute_value
+    [a-z\-_]+ {
+      def content
+        text_value
+      end
+    }
+  end
+
+  #rule beginning_of_line
+  #   {
+  #    def content
+  #      nil
+  #    end
+  #  }
+  #end
+end

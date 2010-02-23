@@ -1,3 +1,8 @@
+require "treetop"
+require "polyglot"
+require "flannel/block"
+require "flannel/base_block"
+
 require 'flannel/wrappable'
 require 'flannel/feed_parser'
 require 'flannel/file_cache'

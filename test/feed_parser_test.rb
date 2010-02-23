@@ -5,12 +5,13 @@ class FeedParserTest < Test::Unit::TestCase
   context "wiring" do
     setup do
       @rubyyot = IO.read(File.join(File.dirname(__FILE__), "..", "features", "fixtures", "rubyyot.rss"))
-      @expected_rubyyot = "<ul><li>\n    <a href='http://blog.rubyyot"
+      @expected_rubyyot = "<ul id='my_feed'><li>\n    <a href='http:/"
     end
     
     should "be set up for feeds" do
       feed = "http://blog.rubyyot.com/tag/rubyyot/feed/rss"
-      body = Flannel.quilt "& #{feed}"
+      Flannel::FeedParser.any_instance.stubs(:get_document).returns @rubyyot
+      body = Flannel.quilt ":feed my_feed #{feed}"
 
       assert_equal(@expected_rubyyot, body[0..40])
     end

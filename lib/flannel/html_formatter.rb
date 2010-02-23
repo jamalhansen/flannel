@@ -6,18 +6,24 @@ module Flannel
       @tags ={:preformatted => "pre", 
               :feed => "ul", 
               :list => "ul", 
-              :header_1 => "h1", 
+              :header_1 => "h1", #old style
               :header_2 => "h2", 
               :header_3 => "h3", 
               :header_4 => "h4", 
               :header_5 => "h5", 
               :header_6 => "h6", 
+              :header_one => "h1", #new style
+              :header_two => "h2", 
+              :header_three => "h3", 
+              :header_four => "h4", 
+              :header_five => "h5", 
+              :header_six => "h6",
               :paragraph => "p",
               :blockquote => "blockquote"}
     end
     
-    def do text, style
-      steps = get_steps_for style
+    def do text, style, id=nil
+      steps = get_steps_for style, id
       inject text, steps
     end
 
@@ -27,33 +33,33 @@ module Flannel
     
     def inject text, steps
       if steps.empty?
-	text
+        text
       else
-	step = steps.shift
-	text = step.call text
-	inject text, steps
+        step = steps.shift
+        text = step.call text
+        inject text, steps
       end
     end
     
-    def get_steps_for style
+    def get_steps_for style, id
       steps = []
       
       case style
 	
       when :preformatted
-	steps << lambda { |text| html_escape text}
+        steps << lambda { |text| html_escape text}
       when :feed
-	steps << lambda { |text| parse_feed text }
+        steps << lambda { |text| parse_feed text }
       else
-	steps << lambda { |text| build_wiki_links text }
-	steps << lambda { |text| convert_external_links text }
+        steps << lambda { |text| build_wiki_links text }
+        steps << lambda { |text| convert_external_links text }
       end
       
       if style == :list
-	steps << lambda { |text| format_list text }
+        steps << lambda { |text| format_list text }
       end
       
-      steps << lambda { |text| wrap text, @tags[style]}
+      steps << lambda { |text| wrap(text, @tags[style], id) }
       
       steps
     end
@@ -104,7 +110,7 @@ module Flannel
     end
     
     def format_list text
-      text.split(/^\*/).reject { |item| item == ""  }.map { |item| wrap(item.chomp, "li") }.join("\n")      
+      text.split(/\n/).reject { |item| item == ""  }.map { |item| wrap(item.chomp, "li") }.join("\n")      
     end
     
     def parse_feed text

@@ -6,52 +6,51 @@ class BlockCutterTest < Test::Unit::TestCase
       @block_cutter = Flannel::BlockCutter.new
     end
 
-    should "split a flannel document into squares based on blank lines" do
-      markup = "foo\n\nbar"
+    should "split a flannel document into blocks based on block_headers" do
+      markup = ":paragraph bar\n some text\n:paragraph baz\n some more text"
 
-      squares = @block_cutter.cut markup
-      assert_equal 2, squares.length
-      assert_equal "foo", squares[0].to_s
-      assert_equal "bar", squares[1].to_s
+      blocks = @block_cutter.cut markup
+      assert_equal 2, blocks.length
+ 
+      assert_equal :paragraph, blocks[0].type
+      assert_equal "bar", blocks[0].id
+      assert_equal :paragraph, blocks[1].type
+      assert_equal "baz", blocks[1].id
+
     end
 
     should "not split preformatted text based on blank lines" do
-      markup = "_foo\n\nbar\n_"
+      markup = ":preformatted my_preformatted\n foo\n\nbar\n"
 
-      squares = @block_cutter.cut markup
-      assert_equal 1, squares.length
-      assert_equal :preformatted, squares[0].style
+      blocks = @block_cutter.cut markup
+      assert_equal 1, blocks.length
+      assert_equal :preformatted, blocks[0].type
+      assert_equal "my_preformatted", blocks[0].id
+      assert_equal "foo\n\nbar", blocks[0].text
     end
 
 
     should "separate preformatted blocks" do
-      markup = "_foo\n_\n\n_bar\n_"
+      markup = ":preformatted one\nfoo\n:preformatted two\nbar\n"
 
-      squares = @block_cutter.cut markup
-      assert_equal 2, squares.length
-      assert_equal :preformatted, squares[0].style
-      assert_equal :preformatted, squares[1].style
+      blocks = @block_cutter.cut markup
+      assert_equal 2, blocks.length
+      assert_equal :preformatted, blocks[0].type
+      assert_equal :preformatted, blocks[1].type
     end
 
     should "strip preformatted markers when found" do
-      markup = "_foo\n\nbar\n_"
+      markup = ":preformatted foo\nfoo\n\nbar\n"
 
-      squares = @block_cutter.cut markup
-      assert_equal "foo\n\nbar",  squares[0].to_s
+      blocks = @block_cutter.cut markup
+      assert_equal "foo\n\nbar",  blocks[0].text
     end
     
     should "set square style to feed based on full tag " do
-      markup = ":feed http://www.example.com/rss"
+      markup = ":feed wonki\nhttp://www.example.com/rss"
 
-      squares = @block_cutter.cut markup
-      assert_equal :feed, squares[0].style
-    end
-    
-    should "set square style to feed based on ampersand abbrev" do
-      markup = "& http://www.example.com/rss"
-
-      squares = @block_cutter.cut markup
-      assert_equal :feed, squares[0].style
+      blocks = @block_cutter.cut markup
+      assert_equal :feed, blocks[0].type
     end
   end
 end

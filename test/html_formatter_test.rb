@@ -7,7 +7,7 @@ class HtmlFormatterTest < Test::Unit::TestCase
     end
     
     should "return html fragment with format" do
-      assert_equal "<p>foo</p>", @formatter.do('foo', :paragraph)
+      assert_equal "<p id='bar'>foo</p>", @formatter.do('foo', :paragraph, "bar")
     end
     
     context "subdirectories" do
