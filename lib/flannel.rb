@@ -8,7 +8,6 @@ require 'flannel/feed_parser'
 require 'flannel/file_cache'
 
 require 'flannel/block_cutter'
-require 'flannel/text_block'
 require 'flannel/html_formatter'
 
 module Flannel
