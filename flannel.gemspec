@@ -73,7 +73,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{flannel}
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{A soft comfortable worn in markup language for Ruby}
   s.test_files = [
     "test/html_formatter_test.rb",

@@ -18,6 +18,16 @@ class BlockCutterTest < Test::Unit::TestCase
       assert_equal "baz", blocks[1].id
 
     end
+    
+    should "accept a block without an id" do
+      markup = ":paragraph\n some text"
+
+      blocks = @block_cutter.cut markup
+      assert_equal 1, blocks.length
+ 
+      assert_equal :paragraph, blocks[0].type
+      assert_nil blocks[0].id
+    end
 
     should "not split preformatted text based on blank lines" do
       markup = ":preformatted my_preformatted\n foo\n\nbar\n"

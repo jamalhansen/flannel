@@ -16,6 +16,12 @@ class BlockParserTest < Test::Unit::TestCase
     assert_doc doc, :paragraph, "wonki", "text"
   end
   
+  def test_parser_returns_simple_block_without_id
+    doc = @parser.parse(":paragraph\ntext")
+    
+    assert_doc doc, :paragraph, nil, "text"
+  end
+  
   def test_parser_returns_block_with_dashed_block_id
     doc = @parser.parse(":paragraph wonki-donki\ntext")
 

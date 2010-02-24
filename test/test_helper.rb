@@ -40,10 +40,12 @@ class Test::Unit::TestCase
     assert_equal :block_type, type[0]
     assert_equal expected_type, type[1]   
     
-    id = header.shift
-    assert_equal 2, id.length
-    assert_equal :block_id, id[0]
-    assert_equal expected_id, id[1] 
+    if expected_id
+      id = header.shift
+      assert_equal 2, id.length
+      assert_equal :block_id, id[0]
+      assert_equal expected_id, id[1] 
+    end
     
     if expected_parent_id
       parent_id = header.shift

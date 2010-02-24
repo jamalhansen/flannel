@@ -17,6 +17,12 @@ class FlannelTest < Test::Unit::TestCase
   end
   
   context "basic behavior" do
+    
+    should "parse a block without an id" do
+      markup = ":paragraph\n this is my paragraph"
+      assert_equal "<p>this is my paragraph</p>",  Flannel.quilt(markup)
+    end
+    
     should "strip and convert underscores to pre tags" do
       markup = ":preformatted foo\nfoo\n\n   bar\n"
       assert_equal "<pre id='foo'>foo\n\n   bar\n</pre>",  Flannel.quilt(markup)
