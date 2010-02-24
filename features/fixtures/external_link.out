@@ -1,3 +1,3 @@
-<p>Lorem ipsum <a href="http://www.example.com" target="_blank">dolor sit amet</a>, consectetur adipiscing elit. Nam ac magna augue, a pretium magna. Aliquam erat volutpat.
+<p id='external_link_paragraph'>Lorem ipsum <a href="http://www.example.com" target="_blank">dolor sit amet</a>, consectetur adipiscing elit. Nam ac magna augue, a pretium magna. Aliquam erat volutpat.
 Proin malesuada, nunc vel <a href="http://www.example.com" target="_blank">porttitor</a> <a href="http://www.example.com" title="nunc" target="_blank">commodo</a>, justo. Nam ac magna augue, a pretium magna. Aliquam erat volutpat.
 Proin malesuada, nunc vel <a href="http://www.example.com" target="_blank">porttitor</a> commodo, justo.</p>

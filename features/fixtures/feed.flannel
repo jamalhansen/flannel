@@ -1,3 +1,5 @@
-& blog.rubyyot.com/tag/rubyyot/feed/rss
+:feed rubyyot
+blog.rubyyot.com/tag/rubyyot/feed/rss
 
-& http://devlicio.us/blogs/sergio_pereira/rss.aspx?Tags=JavaScript-Demystified&AndTags=1
+:feed javascript-demystified
+http://devlicio.us/blogs/sergio_pereira/rss.aspx?Tags=JavaScript-Demystified&AndTags=1

@@ -1,5 +1,5 @@
-<p>This is paragraph one.</p>
+<p id='p_one'>This is paragraph one.</p>
 
-<p>This is paragraph two.</p>
+<p id='p_two'>This is paragraph two.</p>
 
-<p>This is paragraph three. Watchout for the end of file.</p>
+<p id='p_three'>This is paragraph three. Watchout for the end of file.</p>

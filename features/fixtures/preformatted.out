@@ -1,13 +1,19 @@
-<p>This is a paragraph</p>
+<p id='p_one'>This is a paragraph</p>
 
-<pre>   This is preformatted text
+<pre id='pre_one'>   This is preformatted text
         it's cool
 
-   and Spiffy</pre>
+   and Spiffy
 
-<pre>This is preformatted too</pre>
+</pre>
 
-<pre>
- So is this</pre>
+<pre id='pre_two'>This is preformatted too
 
-<p>This is a paragraph</p>
+
+</pre>
+
+<pre id='pre_three'> So is this
+
+</pre>
+
+<p id='p_two'>This is a paragraph</p>

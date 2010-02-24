@@ -1,4 +1,4 @@
-<ul><li>
+<ul id='rubyyot'><li>
     <a href='http://blog.rubyyot.com/2009/05/summer-of-learning-challenge/'>Plans for Rubyyot.com and the Summer of Learning Challenge</a>
   </li>
   <li>
@@ -8,7 +8,7 @@
     <a href='http://blog.rubyyot.com/2009/03/rubyyotcom-is-dead-long-live-rubyyotcom/'>Rubyyot.com is dead; Long live Rubyyot.com</a>
   </li></ul>
 
-<ul><li>
+<ul id='javascript-demystified'><li>
     <a href='http://devlicio.us/blogs/sergio_pereira/archive/2009/09/19/javascript-and-its-love-for-zeroes.aspx'>JavaScript and its love for zeroes</a>
   </li>
   <li>

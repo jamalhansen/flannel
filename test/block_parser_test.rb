@@ -41,7 +41,7 @@ class BlockParserTest < Test::Unit::TestCase
     
     blocks = doc.content
     
-    assert_block blocks[0], :paragraph, "foo", "bar"
+    assert_block blocks[0], :paragraph, "foo", "bar\n"
     assert_block blocks[1], :paragraph, "baz", "bonzo"
   end
 end

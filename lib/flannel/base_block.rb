@@ -23,11 +23,19 @@ module Flannel
       end
       
       @text = args.shift
+      strip_text
     end
     
     def to_h
       html_formatter = Flannel::HtmlFormatter.new
       html_formatter.do(@text, @type, @id)
+    end
+    
+    def strip_text
+      return if @type == :preformatted
+      return unless @text
+      
+      @text = @text.strip
     end
   end
 end

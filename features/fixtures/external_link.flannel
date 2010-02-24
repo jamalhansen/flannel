@@ -1,3 +1,4 @@
+:paragraph external_link_paragraph
 Lorem ipsum [dolor sit amet|http://www.example.com], consectetur adipiscing elit. Nam ac magna augue, a pretium magna. Aliquam erat volutpat.
 Proin malesuada, nunc vel [porttitor|www.example.com] [ commodo | http://www.example.com | nunc ], justo. Nam ac magna augue, a pretium magna. Aliquam erat volutpat.
 Proin malesuada, nunc vel [ porttitor | http://www.example.com ] commodo, justo.

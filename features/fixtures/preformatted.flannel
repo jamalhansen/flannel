@@ -1,16 +1,18 @@
+:paragraph p_one
 This is a paragraph
 
-_   This is preformatted text
+:preformatted pre_one
+   This is preformatted text
         it's cool
 
    and Spiffy
-_
 
-_This is preformatted too
-_
+:preformatted pre_two
+This is preformatted too
 
-_
+
+:preformatted pre_three
  So is this
-_
 
+:paragraph p_two
 This is a paragraph

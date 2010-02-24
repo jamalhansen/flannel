@@ -1,6 +1,8 @@
-
+:paragraph p_one
 This is paragraph one.
 
+:paragraph p_two
 This is paragraph two.
 
+:paragraph p_three
 This is paragraph three. Watchout for the end of file.

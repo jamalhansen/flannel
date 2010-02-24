@@ -26,7 +26,7 @@ class BlockCutterTest < Test::Unit::TestCase
       assert_equal 1, blocks.length
       assert_equal :preformatted, blocks[0].type
       assert_equal "my_preformatted", blocks[0].id
-      assert_equal "foo\n\nbar", blocks[0].text
+      assert_equal " foo\n\nbar\n", blocks[0].text
     end
 
 
@@ -43,7 +43,7 @@ class BlockCutterTest < Test::Unit::TestCase
       markup = ":preformatted foo\nfoo\n\nbar\n"
 
       blocks = @block_cutter.cut markup
-      assert_equal "foo\n\nbar",  blocks[0].text
+      assert_equal "foo\n\nbar\n",  blocks[0].text
     end
     
     should "set square style to feed based on full tag " do

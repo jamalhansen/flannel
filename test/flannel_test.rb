@@ -19,12 +19,12 @@ class FlannelTest < Test::Unit::TestCase
   context "basic behavior" do
     should "strip and convert underscores to pre tags" do
       markup = ":preformatted foo\nfoo\n\n   bar\n"
-      assert_equal "<pre id='foo'>foo\n\n   bar</pre>",  Flannel.quilt(markup)
+      assert_equal "<pre id='foo'>foo\n\n   bar\n</pre>",  Flannel.quilt(markup)
     end
 
     should "escape preformatted text" do
       markup = ":preformatted math\n4 - 2 > 2 - 2\n"
-      assert_equal "<pre id='math'>4 - 2 &gt; 2 - 2</pre>",  Flannel.quilt(markup)
+      assert_equal "<pre id='math'>4 - 2 &gt; 2 - 2\n</pre>",  Flannel.quilt(markup)
     end
   end
 

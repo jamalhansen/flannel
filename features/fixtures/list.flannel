@@ -1,3 +1,4 @@
-* Item one
-* Item two
-* This is the much longer item and this item is known simply as item three.
+:list test-list
+Item one
+Item two
+This is the much longer item and this item is known simply as item three.
