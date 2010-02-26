@@ -40,7 +40,7 @@ grammar Block
   end
  
   rule block_type
-    ( feed / preformatted / list / header / blockquote / paragraph  ) {
+    ( feed / preformatted / list / header / blockquote / dlist / image / paragraph ) {
       def content
         [:block_type, text_value.to_sym ]
       end
@@ -87,12 +87,20 @@ grammar Block
     "feed" { def content; text_value; end }
   end
 
+  rule image
+    "image" { def content; text_value; end }
+  end
+
   rule preformatted
     "preformatted" { def content; text_value; end }
   end
 
   rule list
     "list" { def content; text_value; end }
+  end
+
+  rule dlist
+    "dlist" { def content; text_value; end }
   end
 
   rule block_id

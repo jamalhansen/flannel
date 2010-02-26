@@ -6,6 +6,7 @@ module Flannel
       @tags ={:preformatted => "pre", 
               :feed => "ul", 
               :list => "ul", 
+              :dlist => "dl", 
               :header_1 => "h1", #old style
               :header_2 => "h2", 
               :header_3 => "h3", 
@@ -50,6 +51,8 @@ module Flannel
         steps << lambda { |text| html_escape text}
       when :feed
         steps << lambda { |text| parse_feed text }
+      when :image
+        steps << lambda { |text| create_img text }
       else
         steps << lambda { |text| build_wiki_links text }
         steps << lambda { |text| convert_external_links text }
@@ -57,6 +60,10 @@ module Flannel
       
       if style == :list
         steps << lambda { |text| format_list text }
+      end
+      
+      if style == :dlist
+        steps << lambda { |text| format_dlist text }
       end
       
       steps << lambda { |text| wrap(text, @tags[style], id) }
@@ -72,6 +79,14 @@ module Flannel
     
     def build_wiki_links text
       text.gsub(/-\w(.*?)\w>/) { |match| %{<a href="#{wiki_link match}">#{format_link_display(match)}</a>}}
+    end
+    
+    def create_img text
+      desc, url = text.split(/\n/, 2)
+      
+      return text unless url
+      
+      "<img src='#{url}' alt='#{desc}' title='#{desc}' />"
     end
     
     def wiki_link topic
@@ -111,6 +126,17 @@ module Flannel
     
     def format_list text
       text.split(/\n/).reject { |item| item == ""  }.map { |item| wrap(item.chomp, "li") }.join("\n")      
+    end
+    
+    def format_dlist text
+      text.split(/\n/).reject { |item| item == ""  }.map { |item| split_definition(item) }.join("\n")      
+    end
+    
+    def split_definition item
+      term, definition = item.split(/\-/, 2).map{ |term| term.strip }
+      
+      return item unless definition
+      "<dt>#{term}</dt><dd>#{definition}</dd>"
     end
     
     def parse_feed text

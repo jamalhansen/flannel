@@ -71,5 +71,17 @@ class BlockParserStylesTest < Test::Unit::TestCase
     assert_doc doc, :header_six, nil, "text"
   end
   
+  def test_definition_list
+    doc = @parser.parse(":dlist:\ntext-foo")
+    
+    assert_doc doc, :dlist, nil, "text-foo"
+  end
+  
+  def test_image
+    doc = @parser.parse(":image:\nThis is an image\n/images/pickle.jpg")
+    
+    assert_doc doc, :image, nil, "This is an image\n/images/pickle.jpg"
+  end
+  
 end
 

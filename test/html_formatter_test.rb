@@ -61,6 +61,20 @@ class HtmlFormatterTest < Test::Unit::TestCase
         assert_equal "<pre>&lt;p&gt;&amp; foo&lt;/p&gt;</pre>", result
       end
     end
+    
+    context "definition list" do
+      should "format definition list" do
+        result = @formatter.do("flannel - a wonderful markup dsl\nruby - a wonderful programming language", :dlist)
+        assert_equal "<dl><dt>flannel</dt><dd>a wonderful markup dsl</dd>\n<dt>ruby</dt><dd>a wonderful programming language</dd></dl>", result
+      end
+    end
+    
+    context "image" do
+      should "format image" do
+        result = @formatter.do("This is a picture of a cat\n/images/cat.png", :image)
+        assert_equal "<img src='/images/cat.png' alt='This is a picture of a cat' title='This is a picture of a cat' />", result
+      end
+    end
 
     context "making permalinks" do
       should "replace spaces with dashes" do
