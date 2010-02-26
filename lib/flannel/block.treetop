@@ -16,7 +16,7 @@ grammar Block
   end
 
   rule block_header
-     block_start block_type block_id? parent_id? attribute_list? [\n]*  {
+     block_start block_type block_id? parent_id? attribute_list? [\s]* ":" [\n]?  {
       def content
         elements.map{ |element| element.respond_to?(:content) ? element.content : nil}.compact
       end
@@ -40,7 +40,7 @@ grammar Block
   end
  
   rule block_type
-    ( paragraph / feed / preformatted / list / header / blockquote ) {
+    ( feed / preformatted / list / header / blockquote / paragraph  ) {
       def content
         [:block_type, text_value.to_sym ]
       end
@@ -48,7 +48,7 @@ grammar Block
   end
  
   rule paragraph
-    "paragraph" { def content; text_value; end }
+    "paragraph" { def text_value; "paragraph"; end }
   end
 
   rule header

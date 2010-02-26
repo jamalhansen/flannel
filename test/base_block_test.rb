@@ -46,7 +46,7 @@ class BaseBlockTest < Test::Unit::TestCase
   end
   
   def test_initialized_from_parser_output
-    text = ":preformatted my-code great-code class=ruby whiz=bang\ndef foo arg\n\t puts arg\n end"
+    text = ":preformatted my-code great-code class=ruby whiz=bang:\ndef foo arg\n\t puts arg\n end"
     doc = BlockParser.new.parse(text)
     block = Flannel::BaseBlock.new doc.content[0]
    
