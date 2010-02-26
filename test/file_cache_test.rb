@@ -5,19 +5,19 @@ class FileCacheTest < Test::Unit::TestCase
   context "Creating File cache" do
     should "require a location" do
       begin
-	cache = Flannel::FileCache.new
-	assert_fail "should have raised ArgumentError"
+        cache = Flannel::FileCache.new
+        assert_fail "should have raised ArgumentError"
       rescue ArgumentError => e
-	assert true
+        assert true
       end
     end
     
     should "require a valid location" do
       begin
-	cache = Flannel::FileCache.new "foo/bar"
-	assert_fail "should have raised Flannel::CacheLocationDoesNotExistError"
+        cache = Flannel::FileCache.new "foo/bar"
+        assert_fail "should have raised Flannel::CacheLocationDoesNotExistError"
       rescue Flannel::CacheLocationDoesNotExistError => e
-	assert true
+        assert true
       end
     end
   end
@@ -29,10 +29,10 @@ class FileCacheTest < Test::Unit::TestCase
     
     should "be private" do
       begin
-	key = @cache.generate_key "http://example.com"
-	assert_fail "generate_key should be private"
+        key = @cache.generate_key "http://example.com"
+        assert_fail "generate_key should be private"
       rescue NoMethodError => e
-	assert true
+        assert true
       end
     end
     

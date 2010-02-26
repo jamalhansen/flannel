@@ -59,4 +59,13 @@ class FlannelTest < Test::Unit::TestCase
       assert_equal result, Flannel.quilt(markup)
     end
   end
+  
+  context "bug fixes" do
+    should "parse a simple paragraph" do
+      markup = ":paragraph\nbar bar\n"
+      result = "<p>bar bar</p>"
+
+      assert_equal result, Flannel.quilt(markup)
+    end
+  end
 end

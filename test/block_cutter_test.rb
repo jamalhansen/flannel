@@ -62,5 +62,23 @@ class BlockCutterTest < Test::Unit::TestCase
       blocks = @block_cutter.cut markup
       assert_equal :feed, blocks[0].type
     end
+    
+    should "parse a paragraph with a simple wiki link" do
+      markup = ":paragraph\n-ravioli>"
+
+      blocks = @block_cutter.cut markup
+      assert_equal :paragraph, blocks[0].type
+      assert_nil blocks[0].id
+      assert_equal '-ravioli>', blocks[0].text
+    end
+    
+    should "parse a simple paragraph" do
+      markup = ":paragraph\nbar bar\n"
+
+      blocks = @block_cutter.cut markup
+      assert_equal :paragraph, blocks[0].type
+      assert_nil blocks[0].id
+      assert_equal "bar bar", blocks[0].text
+    end
   end
 end

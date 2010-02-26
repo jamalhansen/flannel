@@ -5,13 +5,14 @@
 
 Gem::Specification.new do |s|
   s.name = %q{flannel}
-  s.version = "0.2.10"
+  s.version = "0.2.11"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jamal Hansen"]
-  s.date = %q{2010-02-23}
+  s.date = %q{2010-02-24}
+  s.default_executable = %q{quilt-it}
   s.email = %q{jamal.hansen@gmail.com}
-  s.executables = ["quilt-it~", "quilt-it"]
+  s.executables = ["quilt-it"]
   s.extra_rdoc_files = [
     "LICENSE",
      "README.rdoc"
@@ -62,6 +63,7 @@ Gem::Specification.new do |s|
      "test/base_block_html_generation_test.rb",
      "test/base_block_test.rb",
      "test/block_cutter_test.rb",
+     "test/block_parser_styles_test.rb",
      "test/block_parser_test.rb",
      "test/feed_parser_test.rb",
      "test/file_cache_test.rb",
@@ -81,6 +83,7 @@ Gem::Specification.new do |s|
      "test/test_helper.rb",
      "test/file_cache_test.rb",
      "test/base_block_test.rb",
+     "test/block_parser_styles_test.rb",
      "test/block_parser_test.rb",
      "test/feed_parser_test.rb",
      "test/flannel_test.rb",

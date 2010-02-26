@@ -1,6 +1,6 @@
 grammar Block
   rule document
-     block* {
+     ( block / not_flannel)* {
       def content
         elements.map{ |element| element.content}
       end
@@ -10,7 +10,7 @@ grammar Block
   rule block
      block_header block_text? {
       def content
-        elements.map{ |element| element.respond_to?(:content) ? element.content : nil}.compact
+        [ :block, elements.map{ |element| element.respond_to?(:content) ? element.content : nil}.compact ]
       end
     }
   end
@@ -144,11 +144,11 @@ grammar Block
     }
   end
 
-  #rule beginning_of_line
-  #   {
-  #    def content
-  #      nil
-  #    end
-  #  }
-  #end
+  rule not_flannel
+    (!(block_header) .)+ {
+      def content
+        [:plain_text, text_value.strip ]
+      end
+    }
+  end
 end

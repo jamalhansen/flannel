@@ -10,6 +10,16 @@ class BlockParserTest < Test::Unit::TestCase
     assert_equal 0, @parser.parse("").content.length, "Parser was expected to return no elements for an empty string"
   end
   
+  def test_parser_returns_text_it_does_not_recognize
+    assert_equal [[:plain_text, "yadda foo bar === cheese"]], @parser.parse("yadda foo bar === cheese").content, "Parser was expected to return non flannel text"
+  end
+  
+  def test_parser_returns_text_it_does_not_recognize_and_flannel
+    expected = [[:plain_text, "yadda foo bar === cheese"], [:block, [[[:block_type, :paragraph], [:attribute_list]], " \n foo"]]]
+    
+    assert_equal expected, @parser.parse("yadda foo bar === cheese\n:paragraph \n foo").content, "Parser was expected to return non flannel text"
+  end
+  
   def test_parser_returns_simple_block
     doc = @parser.parse(":paragraph wonki\ntext")
     
@@ -47,7 +57,7 @@ class BlockParserTest < Test::Unit::TestCase
     
     blocks = doc.content
     
-    assert_block blocks[0], :paragraph, "foo", "bar\n"
-    assert_block blocks[1], :paragraph, "baz", "bonzo"
+    assert_block blocks[0][1], :paragraph, "foo", "bar\n"
+    assert_block blocks[1][1], :paragraph, "baz", "bonzo"
   end
 end

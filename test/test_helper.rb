@@ -12,6 +12,10 @@ class Test::Unit::TestCase
     assert false, message
   end
   
+  def new_block list
+    Flannel::BaseBlock.new [ :block, list ]
+  end
+  
   def clear_dir dirname
     Dir.foreach(dirname) do |f|
       path = File.join(dirname, f)
@@ -27,8 +31,12 @@ class Test::Unit::TestCase
   
   def assert_doc doc, expected_type, expected_id, expected_text, expected_parent_id=nil, expected_attributes=nil
     assert_not_nil doc
-    block = doc.content[0]
-
+    
+    item = doc.content[0]
+    assert_equal :block, item[0]
+    
+    block = item[1]
+    
     assert_block block, expected_type, expected_id, expected_text, expected_parent_id, expected_attributes
   end
   

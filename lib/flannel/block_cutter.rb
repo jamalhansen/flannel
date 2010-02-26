@@ -1,13 +1,12 @@
 module Flannel
   class BlockCutter
     def cut markup
-      #pieces = split_preformatted_blocks(markup)
-      #pieces = pieces.map { |part| split_into_blocks(part) }
-      #pieces.flatten!
-      #convert_to_text_blocks pieces
-      
       parser = BlockParser.new
-      blocks = parser.parse(markup).content.map { |block| Flannel::BaseBlock.new(block) }
+      blocks = parser.parse(markup).content.map { |block| form_blocks block }
+    end
+    
+    def form_blocks block
+      Flannel::BaseBlock.new(block)
     end
     
     def split_into_blocks markup
