@@ -7,6 +7,7 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "flannel"
     gem.summary = %Q{A soft comfortable worn in markup language for Ruby}
+    gem.description = %Q{Flannel is a markup language that is not intended for your web app.  It's for your local use, to write a blog entry in your text editor or a number of other uses.}
     gem.email = "jamal.hansen@gmail.com"
     gem.homepage = "http://github.com/rubyyot/flannel"
     gem.authors = ["Jamal Hansen"]
