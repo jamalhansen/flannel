@@ -30,17 +30,17 @@ module Flannel
       item_string = @cache.retrieve(url) if @cache
       
       unless item_string 
-	item_string = ""
-	doc = get_document(url)
-	items = get_items(doc)
+        item_string = ""
+        doc = get_document(url)
+        items = get_items(doc)
 
-	items.each do |item|
-	  link = inner_html(item, "link")
-	  title = inner_html(item, "title")
-	  item_string << format_item(link, title)
-	end
-	
-	@cache.save url, item_string if @cache
+        items.each do |item|
+          link = inner_html(item, "link")
+          title = inner_html(item, "title")
+          item_string << format_item(link, title)
+        end
+        
+        @cache.save url, item_string if @cache
       end
       
       item_string

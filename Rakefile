@@ -34,12 +34,14 @@ begin
   require 'rcov/rcovtask'
   Rcov::RcovTask.new do |test|
     test.libs << 'test'
-    test.pattern = 'test/**/*_test.rb'
+    test.pattern = 'test/*_test.rb'
     test.verbose = true
+    test.rcov_opts << '--html'
+    test.output_dir = 'coverage'
   end
 rescue LoadError
   task :rcov do
-    abort "RCov is not available. In order to run rcov, you must: sudo gem install spicycode-rcov"
+    abort "RCov is not available. In order to run rcov, you must: sudo gem install rcov"
   end
 end
 
@@ -68,4 +70,18 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+begin
+  require 'reek/rake/task'
+
+  Reek::Rake::Task.new do |t|
+    t.fail_on_error = false
+  end
+rescue LoadError
+  task :reek do
+    abort "Reek is not available. In order to run reek, you must: sudo gem install reek"
+  end
+end
+
+
 

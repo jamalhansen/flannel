@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{flannel}
-  s.version = "0.2.13"
+  s.version = "0.2.14"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jamal Hansen"]
-  s.date = %q{2010-02-26}
+  s.date = %q{2010-02-28}
   s.default_executable = %q{quilt-it}
   s.description = %q{Flannel is a markup language that is not intended for your web app.  It's for your local use, to write a blog entry in your text editor or a number of other uses.}
   s.email = %q{jamal.hansen@gmail.com}
@@ -52,6 +52,8 @@ Gem::Specification.new do |s|
      "features/support/env.rb",
      "features/wiki_links.feature",
      "flannel.gemspec",
+     "graphics/flannel.xcf",
+     "graphics/flannel_small.jpg",
      "lib/flannel.rb",
      "lib/flannel/base_block.rb",
      "lib/flannel/block.treetop",

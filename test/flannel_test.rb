@@ -1,3 +1,4 @@
+
 require 'test_helper'
 
 class FlannelTest < Test::Unit::TestCase
@@ -67,5 +68,6 @@ class FlannelTest < Test::Unit::TestCase
 
       assert_equal result, Flannel.quilt(markup)
     end
+    
   end
 end

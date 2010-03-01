@@ -1,3 +1,5 @@
+require 'flannel/html_formatter'
+
 module Flannel
   class BaseBlock
     attr_reader :type, :id, :text, :parent_id, :attributes
