@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'flannel/html_formatter'
 
 module Flannel
