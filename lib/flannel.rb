@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'flannel/wrappable'
 require 'flannel/feed_parser'
 require 'flannel/file_cache'

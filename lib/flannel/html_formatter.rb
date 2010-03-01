@@ -23,14 +23,10 @@ module Flannel
     
     def do text, style, id=nil
       @text = text
-      @text.encode("UTF-8")
-      
       @style = style
       @id = id      
       
-      html = build_html
-      html.encode("UTF-8")
-      html
+      build_html
     end
 
     def build_html

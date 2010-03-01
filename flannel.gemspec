@@ -62,6 +62,7 @@ Gem::Specification.new do |s|
      "lib/flannel/feed_parser.rb",
      "lib/flannel/file_cache.rb",
      "lib/flannel/html_formatter.rb",
+     "lib/flannel/html_transformable.rb",
      "lib/flannel/wrappable.rb",
      "test/base_block_html_generation_test.rb",
      "test/base_block_test.rb",
