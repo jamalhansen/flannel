@@ -15,7 +15,7 @@ module Flannel
         @type = :paragraph
       end
       
-      strip_text
+      strip_and_encode_text
     end
     
     def create_from_list list
@@ -46,7 +46,9 @@ module Flannel
       html_formatter.do(@text, @type, @id)
     end
     
-    def strip_text
+    def strip_and_encode_text
+      @text.encode("UTF-8")
+      
       return if @type == :preformatted
       return unless @text
       
