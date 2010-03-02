@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Flannel
   module Wrappable
     def wrap content, tag, element_id=nil

@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'flannel/html_transformable'
 
 module Flannel
@@ -26,9 +28,7 @@ module Flannel
       @style = style
       @id = id
 
-      html = build_html
-      html.force_encoding("UTF-8")
-      html
+      build_html
     end
 
     def build_html

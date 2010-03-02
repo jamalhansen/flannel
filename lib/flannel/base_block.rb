@@ -48,7 +48,6 @@ module Flannel
 
     def strip_and_encode_text
       return unless @text
-      @text.force_encoding("UTF-8")
 
       return if @type == :preformatted
       return unless @text
